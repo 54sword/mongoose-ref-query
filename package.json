@@ -3,16 +3,23 @@
   "version": "0.1.0",
   "author": "Adam Jacob Becker <ad@mbecker.cc>",
   "description": "Given a Mongoose model and an array of URI params, construct a query for use in a search API.",
-  "keywords": ["API", "mongoose", "search", "parameters"],
+  "keywords": [
+    "API",
+    "mongoose",
+    "search",
+    "parameters"
+  ],
   "scripts": {
-    "pretest": "node load_fixtures.js; node app.js",
-    "test": "mocha"
+    "test": "mocha --reporter list test/*/tests.js"
   },
   "devDependencies": {
+    "expect.js": "*",
     "express": "3.3.x",
+    "glob": "^4.0.3",
+    "lodash": "^2.4.1",
     "mocha": "*",
-    "zombie": "*",
-    "expect.js": "*"
+    "q": "^1.0.1",
+    "request": "^2.37.0"
   },
   "dependencies": {
     "mongoose": "3.6.x"
