@@ -21,7 +21,10 @@ module.exports = function(connection) {
                     nUmb3r: 30
                 },
                 3
-            ]
+            ],
+            age: 18,
+            ofNumber: [12, 82, 11],
+            ofString: ['abc', 'def']
         },
         {
             name: "noe",
@@ -32,13 +35,16 @@ module.exports = function(connection) {
                 {
                     aFrickinDate: new Date("2000-01-02T01:10:00")
                 }
-            ]
+            ],
+            ofString: ['bbc', 'def']
         },
         {
             name: "jael",
             living: false,
             mixed: { mixedProperty: "mixedvalue" },
-            ofMixed: []
+            ofMixed: [],
+            ofNumber: [12, 82],
+            ofString: ['cbc', 'def']
         }
     ];
 

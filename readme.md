@@ -20,6 +20,10 @@ It can check that the query matches the schema and if not throw an error ( disab
 
 **Will probably change!!!** When searching strings, by default it does a partial, case-insensitive match. (Which is not the default in MongoDB.)
 
+## Current Limitations
+
+Can't check if string is empty.
+
 ## Usage
 
 Apply the plugin to any schema in the usual Mongoose fashion:
@@ -149,6 +153,44 @@ Querying subpaths of a path defined as empty array ( without specifying element'
 ## Search Operators
 
 This is a list of the optional search operators you can use for each SchemaType.
+
+For the default operator of for the pseudo operator `eq` the `in` operator is used so that multiple conditions can be set on a single path.
+
+```
+/monster?monster-number=1{lt}2
+results in the query
+{ monster-bumber : { $in : [ 1 ], $lt : 2 } }
+```
+
+this query would not be possible without using the $in operator ( there would be no property name ).
+
+#### ATTENTION
+
+In your code you should **ALWAYS** use an explicit primary operator for each criteria, **NEVER** apply the default for the following reason:
+
+suppose eats is an array of strings
+
+```
+/monsters?eats={all}Carrot,Tomato{regex}n$
+```
+
+maps to all the monsters that eat Carrots **and** Tomato and also eats at least one item ending with *n*.
+
+But if the user doesn't supply any data, the query would result in
+
+```
+/monsters?eats={all}{regex}n$
+```
+
+Which would return all the monstears that eats **only** items ending with *n*. This can be fixed by explicitly defining a primary operator *in*.
+
+```
+/monsters?eats={all}Carrot,Tomato{in}{regex}n$ -> /monsters?eats={all}{in}{regex}n$
+```
+
+For this purpose we also add the primary operator `eq` as the explicit form of the default matching with a single value.
+
+**TODO write tests for this.**
 
 #### Number
 

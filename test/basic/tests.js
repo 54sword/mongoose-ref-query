@@ -6,13 +6,16 @@ describe('basic functionality', function(){
   // without any query params, loads all monsters
   testPath("/monster", 6, isOfNumber);
 
-  // does case-insensitive searching
-  testPath("/monster?name=people", "Big Purple People Eater", hasMonster);
+  // does string searching
+  testPath("/monster?name=Big Purple People Eater", "Big Purple People Eater", hasMonster);
 
   /* it ignores them only is set in the options 
   // ignores unmatched params
   testPath("/monster?coffee=black", 6, isOfNumber);
   */
+
+  // can't use exact matching with other operators ( should return error )
+  testPath("/monster?monster_identification_no={in}1{lt}20", "Big Purple People Eater", hasMonster);
 
   // can sort results
   testPath("/monster?sort_by=monster_identification_no,-1", ["Bessie the Lochness Monster", "Big Purple People Eater"], inOrder);
@@ -43,7 +46,10 @@ describe('basic functionality', function(){
   testPath("/monster?monster_identification_no={ne}200", 4, isOfNumber);
 
   // excludes results that match {ne} param for Strings, case insensitive
-  testPath("/monster?name={ne}biggie", 4, isOfNumber);
+  testPath("/monster?name={ne}Biggie Smalls", 5, isOfNumber);
+  //
+  // excludes results that match {ne} param for Strings, case insensitive
+  testPath("/monster?name={not}{iregex}biggie", 4, isOfNumber);
 
   // handles paging of results
   testPath("/monster?page=2&per_page=4", 2, isOfNumber);
@@ -55,7 +61,7 @@ describe('basic functionality', function(){
   testPath("/monster?data.mood=sad", ["Big Purple People Eater"], containsMonsters);
 
   // handles schemaless property with case-insensitivity
-  testPath("/monster?data.mood=SAD", ["Big Purple People Eater"], containsMonsters);
+  testPath("/monster?data.mood=SAD", 0, isOfNumber);
 
   // can handle schemaless uppercase property
   testPath("/monster?data.MODE=kill", ["Big Purple People Eater"], containsMonsters);
@@ -65,20 +71,13 @@ describe('basic functionality', function(){
 
   describe('SchemaString', function(){
 
-      // filters without case-sensitivity
-      testPath("/monster?name=big%20purple", ["Big Purple People Eater"], containsMonsters);
+      testPath("/monster?name=big%20purple", 0, isOfNumber);
   
-      // doesnt match fuzzy results when using {exact}
-      testPath("/monster?name={exact}big%20purple", 0, isOfNumber);
+      testPath("/monster?name=big%20pUrple%20People%20Eater", 0, isOfNumber);
   
-      // has case sensitivity when using {exact}
-      testPath("/monster?name={exact}big%20pUrple%20People%20Eater", 0, isOfNumber);
+      testPath("/monster?name=Big%20Purple%20People%20Eater", ["Big Purple People Eater"], containsMonsters);
   
-      // returns correct result with {exact}
-      testPath("/monster?name={exact}Big%20Purple%20People%20Eater", ["Big Purple People Eater"], containsMonsters);
-  
-      // does partial matching by default
-      testPath("/monster?name=biggie%20smalls", ["Biggie Smalls", "Biggie Smalls the 2nd"], containsMonsters);
+      testPath("/monster?name={iregex}biggie%20smalls", ["Biggie Smalls", "Biggie Smalls the 2nd"], containsMonsters);
 
   });
 
@@ -113,13 +112,15 @@ describe('basic functionality', function(){
       testPath("/monster?monster_identification_no={nin}1,301", ["Biggie Smalls", "Biggie Smalls the 2nd", "Bessie the Lochness Monster", "Clay Johnson"], containsMonsters);
   
       // excludes results matching values specified in {nin} for Strings, case insensitive
-      testPath("/monster?name={nin}Purple,Enstein", ["Biggie Smalls", "Biggie Smalls the 2nd", "Bessie the Lochness Monster", "Clay Johnson"], containsMonsters);
+      testPath("/monster?name={nin}Big Purple People Eater,Frankenstein", ["Biggie Smalls", "Biggie Smalls the 2nd", "Bessie the Lochness Monster", "Clay Johnson"], containsMonsters);
   
+      /* have to dig up on expected behaviour of this query
+       * - first idea would be - all monsters containing at least one food that has a name different than kale or beets
+       * - according to mongo docs - all monsters that contain only food with names different from kale and beets
+       *   but it returns all of them
       // excludes results matching values specified in {nin} for subdocuments
-      testPath("/monster?foods.name={nin}kale,beets", [ "Biggie Smalls", "Biggie Smalls the 2nd", "Bessie the Lochness Monster", "Clay Johnson"], containsMonsters);
-  
-      // returns correct results for {all}
-      testPath("/monster?monster_identification_no={all}1,301", 0, isOfNumber);
+      testPath("/monster?foods.name={nin}kale,beets", [ "Biggie Smalls", "Biggie Smalls the 2nd" ], containsMonsters);
+      */
 
   });
 
@@ -153,15 +154,14 @@ describe('basic functionality', function(){
       describe('SchemaString', function(){
           
           // does a basic filter
-          testPath("/monster?foods.name=kale", ["Big Purple People Eater", "Frankenstein"], containsMonsters);
+          testPath("/monster?foods.name=Kale", ["Big Purple People Eater", "Frankenstein"], containsMonsters);
           
-          
-          // calculates {all} correctly
-          testPath("/monster?foods.name={all}kale,beets", ["Big Purple People Eater"], containsMonsters);
-          
-          // calculates {any} correctly
-          testPath("/monster?foods.name=kale,beets", ["Big Purple People Eater", "Frankenstein"], containsMonsters);
+          // Defaults to {in}
+          testPath("/monster?foods.name=Kale,Beets", ["Big Purple People Eater", "Frankenstein"], containsMonsters);
       
+          // calculates {in} correctly
+          testPath("/monster?foods.name={in}{regex}^K,^W", ["Big Purple People Eater", "Frankenstein"], containsMonsters);
+
       });
       
       

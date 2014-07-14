@@ -8,7 +8,9 @@ describe('schemeTypes', function(){
 
   testPath('/rainbow?living=false', ['noe','jael']);
 
-  testPath('/rainbow?mixed=texty', ['noe']);
+  testPath('/rainbow?mixed=texty', []);
+
+  testPath('/rainbow?mixed=texty!', ['noe']);
 
   /* doesn't work becouse default on mixed is regex
   testPath('/rainbow?ofMixed=3', ['albert']);
@@ -17,6 +19,22 @@ describe('schemeTypes', function(){
   testPath('/rainbow?mixed.mixedProperty=mixedvalue', ['jael']);
 
   testPath('/rainbow?ofMixed.anything=i want', ['albert']);
+
+  /* should throw error 
+  testPath('/rainbow?age={all}18', ['albert']);
+  */
+
+  testPath('/rainbow?age=18', ['albert']);
+  
+  testPath('/rainbow?ofNumber=12', ['albert', 'jael']);
+
+  testPath('/rainbow?ofNumber=11', ['albert']);
+
+  testPath('/rainbow?ofNumber={all}12,11', ['albert']);
+
+  /* has to work when added support for array element type
+  testPath('/rainbow?ofString={in}{regex}^a,^b', ['albert', 'noe']);
+  */
 
   /* have to add support for the date schema
   testPath('/rainbow?updated=2013-03-01T01:10:00', ['albert']);

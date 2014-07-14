@@ -4,21 +4,23 @@ DEV NOTES
 TODO
 ----
 
+- write a test for exact number matching
 - tests for population
+- objectidonly test
+- throw errors on wrong number of arguments supplied to given operator
+- cast the args on array queries    /smurfs?eats={all}{regex}uk$,en$ only all the smurfs eating at least one of the
+  vegetables ending with "uk" and at lest one ending with "en"
+
 - ? check if not operator is used the right way
 - ? string regex 
-- add fields parameter test
 - ? add casting to type operator for mixed schema  ?data.age={number}5
-- write a test for exact number matching
 - ? add multiple operator match ?name={in}{exact}Joe,Mag 
 - add support for all the schematypes & check the existing ones
     missing:
     - date
     - buffer
 - geo indexes ? operators ?
-- add support for escaped comma in lists ?name={in}a\,b,c would return all that match "a,b" or "c"
-        just replace val.split(',') with custom state-machine function
-- add support for curly brackets is values ?name=myn\{name would return all that match "myn{ame"
+
 - grouping of queries
     - or operator ?{or}(foods.records.amout={lt}5{gt}0|foods.records.amount={gt}1000)
       returns all that matches ( 0 < amount < 5 ) || ( amount > 1000 )
