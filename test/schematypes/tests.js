@@ -30,11 +30,11 @@ describe('schemeTypes', function(){
 
   testPath('/rainbow?ofNumber=11', ['albert']);
 
+  /* should work after adding support for structured queries
   testPath('/rainbow?ofNumber={all}12,11', ['albert']);
-
-  /* has to work when added support for array element type
-  testPath('/rainbow?ofString={in}{regex}^a,^b', ['albert', 'noe']);
   */
+
+  testPath('/rainbow?ofString={in}{regex}^a,^b', ['albert', 'noe']);
 
   /* have to add support for the date schema
   testPath('/rainbow?updated=2013-03-01T01:10:00', ['albert']);

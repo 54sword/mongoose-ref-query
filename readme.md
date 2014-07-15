@@ -154,16 +154,6 @@ Querying subpaths of a path defined as empty array ( without specifying element'
 
 This is a list of the optional search operators you can use for each SchemaType.
 
-For the default operator of for the pseudo operator `eq` the `in` operator is used so that multiple conditions can be set on a single path.
-
-```
-/monster?monster-number=1{lt}2
-results in the query
-{ monster-bumber : { $in : [ 1 ], $lt : 2 } }
-```
-
-this query would not be possible without using the $in operator ( there would be no property name ).
-
 #### ATTENTION
 
 In your code you should **ALWAYS** use an explicit primary operator for each criteria, **NEVER** apply the default for the following reason:

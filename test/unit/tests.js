@@ -34,7 +34,7 @@ describe('function tests', function(){
         var input, output, expected;
 
         input = {
-            a : "{in}b{all}c"
+            a : "{in}b{gt}c"
         };
 
         expected = {
@@ -44,7 +44,7 @@ describe('function tests', function(){
                     args: ['b']
                 },
                 {
-                    operators: ['all'],
+                    operators: ['gt'],
                     args: ['c']
                 }
             ]
@@ -116,7 +116,7 @@ describe('function tests', function(){
 
         input = {
             first : "{in}b,c,d{in}{oop}e,f",
-            second : "{all}z,x,y{all}{oop}8,3"
+            second : "{in}z,x,y{in}{oop}8,3"
         };
 
         expected = {
@@ -132,11 +132,11 @@ describe('function tests', function(){
             ],
             second : [
                 {
-                    operators: ['all'],
+                    operators: ['in'],
                     args: ['z', 'x', 'y']
                 },
                 {
-                    operators: ['all', 'oop'],
+                    operators: ['in', 'oop'],
                     args: ['8', '3']
                 }
             ]
@@ -153,7 +153,7 @@ describe('function tests', function(){
         var input, output, expected;
 
         input = {
-            a : "{in}{regex}{all}"
+            a : "{in}{regex}{in}"
         };
 
         expected = {
@@ -163,7 +163,7 @@ describe('function tests', function(){
                     args: []
                 },
                 {
-                    operators: ['all'],
+                    operators: ['in'],
                     args: []
                 }
             ]
@@ -213,7 +213,7 @@ describe('function tests', function(){
     it("escaping an invalid character throws an error", function() {
 
         var input = {
-            a : "{in}{regex}{all}th\\e val"
+            a : "{in}{regex}{in}th\\e val"
         };
 
         expect(function() {
@@ -225,7 +225,7 @@ describe('function tests', function(){
     it("escaping the end of string throws an error", function() {
 
         var input = {
-            a : "{in}{regex}{all}the val\\"
+            a : "{in}{regex}{in}the val\\"
         };
 
         expect(function() {

@@ -5,27 +5,28 @@ TODO
 ----
 
 - write a test for exact number matching
+- add testing for errors
 - tests for population
+- structured tests for schematypes one tests.js file for each type
 - objectidonly test
 - throw errors on wrong number of arguments supplied to given operator
-- cast the args on array queries    /smurfs?eats={all}{regex}uk$,en$ only all the smurfs eating at least one of the
-  vegetables ending with "uk" and at lest one ending with "en"
+- rewrite docs - divide into multiple .md files
+- write client escaping library
 
-- ? check if not operator is used the right way
-- ? string regex 
-- ? add casting to type operator for mixed schema  ?data.age={number}5
-- ? add multiple operator match ?name={in}{exact}Joe,Mag 
+- add casting to type operator for mixed schema  ?data.age={number}5
 - add support for all the schematypes & check the existing ones
     missing:
     - date
     - buffer
 - geo indexes ? operators ?
 
-- grouping of queries
+- structured queries
+    - all operator ( cast the args on array queries    /smurfs?eats={all}{regex}uk$,en$
+      only all the smurfs eating at least one of the vegetables ending with "uk" and at lest one ending with "en"
+      => { smurfs : { $all : { $in : [ /uk$/, /en$/ ] } } } )
     - or operator ?{or}(foods.records.amout={lt}5{gt}0|foods.records.amount={gt}1000)
       returns all that matches ( 0 < amount < 5 ) || ( amount > 1000 )
     - {elemMatch}
-    - probably through a filter that would map such a syntax to a structured object
 
 ## Testing
 
@@ -47,9 +48,22 @@ The tests are divided into folders. Eeach suite must contain it's own
 | routes.js | function(app)              | to register the routes on the server for the testing framework
 | tests.js  | <nothing>                  | the mocha tests
 
-mongo links
+## Notes
+
+For the default operator of for the pseudo operator `eq` the `in` operator is used so that multiple conditions can be set on a single path.
+
+```
+/monster?monster-number=1{lt}2
+results in the query
+{ monster-bumber : { $in : [ 1 ], $lt : 2 } }
+```
+
+this query would not be possible without using the $in operator ( there would be no property name ).
+
+Mongo links
 -----------
 
 [format](http://docs.mongodb.org/manual/tutorial/query-documents/)
 [operators](http://docs.mongodb.org/manual/reference/operator/query/)
 
+[comparison\_operators](http://docs.mongodb.org/manual/reference/operator/query/#comparison)
