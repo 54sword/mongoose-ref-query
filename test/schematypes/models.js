@@ -21,8 +21,10 @@ module.exports = function(connection) {
         ofBoolean:  [Boolean],
         ofMixed:    [Schema.Types.Mixed],
         ofObjectId: [Schema.Types.ObjectId],
+        indexedText: String
     });
 
+    rainbowSchema.index({'indexedText': 'text'});
     rainbowSchema.plugin(mongooseApiQuery);
 
     return {

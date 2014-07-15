@@ -51,6 +51,7 @@ The tests are divided into folders. Eeach suite must contain it's own
 ## Notes
 
 For the default operator of for the pseudo operator `eq` the `in` operator is used so that multiple conditions can be set on a single path.
+( For the same reason the `all` operator is not used and is substitudet by an `and` containing and `in` (see notes.md) )
 
 ```
 /monster?monster-number=1{lt}2
@@ -67,3 +68,10 @@ Mongo links
 [operators](http://docs.mongodb.org/manual/reference/operator/query/)
 
 [comparison\_operators](http://docs.mongodb.org/manual/reference/operator/query/#comparison)
+
+Mongo terms
+-----------
+
+Might want to rename the variables according to them.
+
+- `query expression` - any criteria or structure of criterias

@@ -24,7 +24,8 @@ module.exports = function(connection) {
             ],
             age: 18,
             ofNumber: [12, 82, 11],
-            ofString: ['abc', 'def']
+            ofString: ['abc', 'def'],
+            indexedText: "This text contains some rocks."
         },
         {
             name: "noe",
@@ -36,7 +37,9 @@ module.exports = function(connection) {
                     aFrickinDate: new Date("2000-01-02T01:10:00")
                 }
             ],
-            ofString: ['bbc', 'def']
+            ofNumber: [33, 22, 82],
+            ofString: ['bbc', 'def'],
+            indexedText: "This text contains some apples."
         },
         {
             name: "jael",
@@ -44,7 +47,8 @@ module.exports = function(connection) {
             mixed: { mixedProperty: "mixedvalue" },
             ofMixed: [],
             ofNumber: [12, 82],
-            ofString: ['cbc', 'def']
+            ofString: ['cbc', 'def'],
+            indexedText: "This text does not contain any apples"
         }
     ];
 

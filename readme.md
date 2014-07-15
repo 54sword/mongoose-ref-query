@@ -202,6 +202,10 @@ For this purpose we also add the primary operator `eq` as the explicit form of t
 - `string={not}coffee` - Not coffee
 - `string={exact}CoFeEe` - Case-sensitive exact match of "CoFeEe"
 
+- `string={text}apple pear` - search on text index ( requires mongodb version >=2.4.6 )
+- `string={text}apple pear,it` - search on text index in italian
+- `string={text}"some apples"` - search on text index whole phrase
+
 #### Boolean
 
 - `t`, `y`, and `1` are all aliases for `true` anything else will be evaluated as `false`
