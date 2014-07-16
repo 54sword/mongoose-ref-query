@@ -19,6 +19,7 @@ TODO
     - date
     - buffer
 - geo indexes ? operators ?
+- score processing on $text search
 
 - structured queries
     - all operator ( cast the args on array queries    /smurfs?eats={all}{regex}uk$,en$

@@ -1,0 +1,26 @@
+[
+    {
+        "name" : "Mark",
+        "foods" : [
+            { "name" : "Carrot", "calories" : 20 },
+            { "name" : "Tomato", "calories" : 35 },
+            { "name" : "Potato", "calories" : 15 }
+        ]
+    },
+    {
+        "name" : "Fred",
+        "foods" : [
+            { "name" : "Tomato", "calories" : 12 },
+            { "name" : "Salad", "calories" : 5 },
+            { "name" : "Cabbage", "calories" : 2 }
+        ]
+    },
+    {
+        "name" : "Anna",
+        "foods" : [
+            { "name" : "Bread", "calories" : 30 },
+            { "name" : "Cabbage", "calories" : 40 },
+            { "name" : "Xeon", "calories" : 8 }
+        ]
+    }
+]
