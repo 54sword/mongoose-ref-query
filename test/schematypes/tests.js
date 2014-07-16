@@ -47,7 +47,6 @@ describe('schemeTypes', function(){
   // size operator
   testPath('/rainbow?ofNumber={size}2', ['jael'], matchesUnordered);
 
-  /*
   describe('text index search', function() {
 
       // any of the words
@@ -56,17 +55,17 @@ describe('schemeTypes', function(){
       // matches phrase
       testPath('/rainbow?indexedText={text}"some apples"', ['noe'], matchesUnordered);
 
-      // exclude the ones containing the word apples
-      testPath('/rainbow?indexedText={text}-apples', ['albert'], matchesUnordered);
+      // all containing the word "text" excluding the ones containing the word apples
+      testPath('/rainbow?indexedText={text}text -apples', ['albert'], matchesUnordered);
 
-      // it will search in italian language see http://docs.mongodb.org/manual/reference/operator/query/text/#op._S_text
+      /*// it will search in italian language see http://docs.mongodb.org/manual/reference/operator/query/text/#op._S_text
       testPath('/rainbow?indexedText={text}pears apples,it', write rest of test );
+      */
 
       // works combined with other criterias
       testPath('/rainbow?indexedText={text}apples&ofNumber=12', ['jael'], matchesUnordered);
 
   });
-  */
 
 });
 
