@@ -91,7 +91,7 @@ V
 
 ## The All operator
 
-Each expression of the $all operator must be suttisfied by at least one element.
+Each expression of the $all operator must be suttisfied by at least one element (it doesn't have to be the same element).
 ( NOT all the elements must suttisfy all the expressions )
 To pass an expression (and not the entire element specification) you must wrap it into an $elemMatch expression ( see examples below ).
 
@@ -106,7 +106,7 @@ Can be used only on paths of type array ( not subpaths ).
 
 ```
 // doesn't work - returns empty result set
-// ( searches for at least one element "{ calories: { $gt : 20 } }" literal matching not expression ) ( probably :D )
+// ( searches for at least one element "{ calories: { $gt : 20 } }" literal matching not expression ) ( probably )
 {
   foods : {
             $all : [
@@ -156,6 +156,66 @@ Can be used only on paths of type array ( not subpaths ).
                 }
             ]
   }
+}
+```
+
+#### Equivalent expressions
+
+```
+{
+  foods: {
+            $all : [
+                {
+                  $elemMatch: {
+                    calories : { $gt: 20 },
+                    name: { $regex : /^B/ }
+                  }
+                }
+            ]
+  }
+}
+```
+
+is equivalent to
+
+```
+{
+  $and : [
+      { "foods.calories" : { $gt: 20 } },
+      { "foods.name" : { $regex : /^B/ } }
+  ]
+}
+```
+
+**The all operator cannot always be replaced by an $and with longer paths.**
+
+```
+// invalid
+{ foods : { $and : [
+            { $elemMatch : { name: { $regex: /^T/ }, calories: 12 } },
+            { $elemMatch : { name: { $regex: /^S/ }, calories: 5 } },
+            ]
+          }
+}
+```
+
+```
+// valid
+{ foods: { $all : [
+            { $elemMatch : { name: { $regex: /^T/ }, calories: 12 } },
+            { $elemMatch : { name: { $regex: /^S/ }, calories: 5 } },
+           ]
+         }
+}
+```
+
+The following throws "Can't canonicalize query: BadValue unknown top level operator: $elemMatch" ( the $elemMatch can be applied only to array paths )
+
+```
+{ $and : [
+            { $elemMatch : { "foods.name": { $regex: /^T/ }, "foods.calories": 12 } },
+            { $elemMatch : { "foods.name": { $regex: /^S/ }, "foods.calories": 5 } },
+            ]
 }
 ```
 

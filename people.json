@@ -19,6 +19,7 @@
         "name" : "Anna",
         "foods" : [
             { "name" : "Bread", "calories" : 30 },
+            { "name" : "Tomato", "calories" : 12 },
             { "name" : "Cabbage", "calories" : 40 },
             { "name" : "Xeon", "calories" : 8 }
         ]
