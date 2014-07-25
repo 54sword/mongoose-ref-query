@@ -181,13 +181,17 @@ is equivalent to
 ```
 {
   $and : [
-      { "foods.calories" : { $gt: 20 } },
-      { "foods.name" : { $regex : /^B/ } }
+      { $elemMatch : {
+          $and: [
+          { "foods.calories" : { $gt: 20 } },
+          { "foods.name" : { $regex : /^B/ } }
+          ]
+      }
   ]
 }
 ```
 
-**The all operator cannot always be replaced by an $and with longer paths.**
+?? **The all operator can/cannot always be replaced by an $and with longer paths.** ??
 
 ```
 // invalid
@@ -197,6 +201,11 @@ is equivalent to
             ]
           }
 }
+// valid
+{ $and : [
+    { foods : { $elemMatch : { name: { $regex: /^T/ }, calories: 12 } } },
+    { foods : { $elemMatch : { name: { $regex: /^S/ }, calories: 5 } } },
+] }
 ```
 
 ```
@@ -210,14 +219,6 @@ is equivalent to
 ```
 
 The following throws "Can't canonicalize query: BadValue unknown top level operator: $elemMatch" ( the $elemMatch can be applied only to array paths )
-
-```
-{ $and : [
-            { $elemMatch : { "foods.name": { $regex: /^T/ }, "foods.calories": 12 } },
-            { $elemMatch : { "foods.name": { $regex: /^S/ }, "foods.calories": 5 } },
-            ]
-}
-```
 
 ## The elemMatch operator
 
@@ -276,3 +277,104 @@ which is can also be written as
     ]
 }
 ```
+
+
+
+
+
+
+
+
+#### Structured
+
+{
+    operators : ['or'],
+    args: [
+        {
+            path : "name",
+            operators: ["in"],
+            args: [ 'joe', 'mag' ]
+        },
+        {
+            path: "foods",
+            operators: ["elemMatch"],
+            args: [
+                {
+                    operators: ['and'],
+                    args: [
+                        {
+                            path: "name",
+                            operators: [],
+                            args: [ /^A/ ]
+                        },
+                        {
+                            path: "calories",
+                            operators: ["gt"],
+                            args: [ 18 ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+{
+    $or : [
+        {
+            name: {
+                $in: [ 'joe', 'mag' ]
+            },
+        },
+        {
+            foods: {
+                $elemMatch: {
+                    $and : [
+                        { name: /^A/ },
+                        { calories: { $gt : 18 } },
+                    ]
+                }
+            }
+        }
+    }
+}
+```
+
+
+
+
+
+## NOTES
+- $size behaves like a comparison operator not an array one.
+- the element operators should be avaiable on all types ( as long as the path exists or is mixed )
+- $where and $text can be only on top
+- $mod, $regex and $near behave as comparison operators
+
+
+evalExpr:
+
+if operators[0] in logical operators ([and, or, ...] )
+- create { $or : [] } array as `A`
+- for e in args ( push evalExpr(e) to A )
+- return it
+
+if operators[0] in array operators [elemMatch] // TODO check for all operator
+- check if path is array
+- get type of array
+- { path : { operators[0] : evalExpr(e[0]) } } ( evalExpr(e[0]) will always be an and )
+
+if operators[0] in array [all]
+- check if path is array
+- get type of array
+- { path : { operators[0] : [] } }
+- feed the above array with evalExpr(args[i])
+
+if path and is final ( doesn't contain a dot ) ( operators[0] in comparison_operators or element operators ([type, exists], evaluation operators ([mod, regex, text, where]), geospatial ):
+-create { path : { operators[0] : args } }
+
+
+
+
+
+
+

@@ -5,17 +5,15 @@ module.exports = function(app, connection) {
     for ( var i in models ) {
     (function(name, model) {
 
-        var model = models[name];
-
         app.get('/'+name.toLowerCase(), function handler(req, res) {
 
-            model.apiQuery(req.query).exec(function(err, monsters) {
+            model.apiQuery(req.query).exec().then(function(monsters) {
               res.send(monsters);
-            });
+            }).done();
 
         });
 
     })(i, models[i]);
-    };
+    }
 
 };

@@ -9,9 +9,9 @@ module.exports = function(app, connection) {
 
         app.get('/'+name.toLowerCase(), function handler(req, res) {
 
-            model.apiQuery(req.query).exec(function(err, monsters) {
+            model.apiQuery(req.query).exec().then(function(monsters) {
               res.send(monsters);
-            });
+            }).done();
 
         });
 

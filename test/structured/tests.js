@@ -10,100 +10,34 @@ var models = require("./models.js")(connection),
 
 describe('function tests', function(){
 
-  describe('apiQueryParams', function(){
-
-    /*
-    it("parses basic value", function() {
-
-        var input, output, expected;
-
-        input = {
-            operators: ['or'],
-            args: [
-                {
-                    path : "name",
-                    operators : [ null ],
-                    args : ["Michael"]
-                },
-                {
-                    path : "name",
-                    operators : [ null ],
-                    args : ["Edvard"]
-                }
-            ]
-        };
-
-        expected = {
-            $or : [
-                { name : "Michael" },
-                { name : "Edvard" }
-            ]
-        };
-
-        output = Person.apiQueryParams( input );
-
-        objectsSame( expected, output );
-
-    });
-
-    it("skldfjlk", function() {
-
-        var input, output, expected;
-
-        input = {
-            operators : ['and'],
-            args: [
-                {
-                    operators: ['or'],
-                    args: [
-                        {
-                            operators: ['gt'],
-                            args: [60],
-                            path: 'age'
-                        },
-                        {
-                            operators: ['lt'],
-                            args: [24],
-                            path: 'age'
-                        }
-                    ]
-                },
-                {
-                    operators: ['or'],
-                    args: [
-                        {
-                            operators: [null, 'regex'],
-                            args: [/^A/],
-                            path: 'name'
-                        },
-                        {
-                            operators: [null, 'regex'],
-                            args: [/^B/],
-                            path: 'name'
-                        },
-                    ]
-                }
-            ]
-        };
-
-        expected = {
-            country : "CZ",
-            $and: [
-                { $or: [ { age: { $gt : 60 } }, { age: { $lt : 24 } } ] },
-                { $or: [ { name: { $regex : /^A/ } }, { name: { $regex : /^B/ } } ] }
-            ]
-        };
-
-        output = Person.apiQueryParams( input );
-
-        objectsSame( expected, output );
-
-    });
-   */
-
+  it("simple apiQueryPrepare test", function() {
+    var trigger = Person.apiQueryPrepare( { name: { $in: ["Mark"] } }, {} );
+    return trigger();
   });
 
+  testExpression("$elemMatch on array of schemas", { "foods": { $elemMatch: { $and: [ { name: { $in: [ /^C/ ] } }, { calories: { $in: ["20"] } }  ] } } }, ["Bela"]);
+
+  testExpression("$elemMatch on array of schemas implicit $and", { "foods": { $elemMatch: { name: { $in: [ /^C/ ] } , calories: { $in: ["20"] } } } }, ["Bela"]);
+
+  testExpression("$or operator", { $or : [{ "name": { $in: [/^X/] } }, { "age" : { $in : [12] } } ]}, ["Alena"]);
+
+  testExpression("$or operator 2", { $or : [{ "age" : { $in : [12] }}, { "name": { $in: [/^X/] } } ]}, ["Alena"]);
+
 });
+
+function testExpression(description, expression, expected) {
+    it(description, function() {
+
+        var trigger = Person.apiQueryPrepare( expression, {} );
+
+        return trigger().then(function(resp) {
+            expect(resp.length).to.be(expected.length);
+            for ( var i = 0, ii = resp.length; i < ii; i++ )
+                expect(expected.indexOf(resp[i].name)).to.not.be(-1);
+        });
+
+    });
+}
 
 // checks whether two objects/arrays have the same structure
 // always pass expected for a and got for b

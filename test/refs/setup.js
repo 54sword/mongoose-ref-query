@@ -134,6 +134,18 @@ module.exports = function(connection) {
         return saveCompanies(companies)
         .then(function(company_ids) {
             console.log("ALL THE COMPANIES WERE SUCCESFULLY SAVED");
+        })
+        .then(function() {
+            var deferred = Q.defer();
+            Employee.findOne({name: "marco"}, function(err, emp) {
+                Employee.findOne({name: "antonio"}, function(err, man) {
+                    emp.manager = man._id;
+                    emp.save(function(err) {
+                        deferred.resolve();
+                    });
+                });
+            });
+            return deferred.promise;
         });
 
     }

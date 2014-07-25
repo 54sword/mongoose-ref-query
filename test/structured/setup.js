@@ -17,17 +17,28 @@ module.exports = function(connection) {
         {
             "name" : "Alena",
             "country" : "CZ",
-            "age" : 12
+            "age" : 12,
+            "foods" : [
+                { name: "Apple", calories: 20 },
+                { name: "Hamburger", calories: 30 }
+            ]
         },
         {
             "name" : "Bela",
             "country" : "CZ",
-            "age" : 80
+            "age" : 80,
+            "foods" : [
+                { name: "Carrot", calories: 20 },
+                { name: "Hamburger", calories: 30 }
+            ]
         },
         {
             "name" : "Mark",
             "country" : "CZ",
-            "age" : 10
+            "age" : 10,
+            "foods" : [
+                { name: "Cucumber", calories: 5 }
+            ]
         }
     ];
 

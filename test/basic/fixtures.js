@@ -47,7 +47,8 @@ module.exports = [
   name: "Biggie Smalls",
   monster_identification_no: 100439,
   eats_humans: false,
-  foods: [{name: "Arms", vegetarian: false, calories: 300}],
+  foods: [{name: "Arms", vegetarian: false, calories: 300},
+          {name: "Kale", vegetarian: true, calories: 20}],
   loc: [38.87,-77.04]
 },
 

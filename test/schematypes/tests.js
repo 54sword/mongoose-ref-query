@@ -1,106 +1,63 @@
 var expect = require("expect.js"),
-    request = require("request");
+    testing = require("../functions.js");
 
 
 describe('schemeTypes', function(){
 
-  testPath('/rainbow?name=albert', ['albert'], matchesUnordered);
+  testPath('/rainbow?name=albert', ['albert'], nameUnorderedMatch);
 
-  testPath('/rainbow?living=false', ['noe','jael'], matchesUnordered);
+  testPath('/rainbow?living=false', ['noe','jael'], nameUnorderedMatch);
 
-  testPath('/rainbow?mixed=texty', [], matchesUnordered);
+  testPath('/rainbow?mixed=texty', [], nameUnorderedMatch);
 
-  testPath('/rainbow?mixed=texty!', ['noe'], matchesUnordered);
+  testPath('/rainbow?mixed=texty!', ['noe'], nameUnorderedMatch);
 
-  /* doesn't work becouse default on mixed is regex
-  testPath('/rainbow?ofMixed=3', ['albert']);
-  */
+  // on mixed a text search is performed
+  testPath('/rainbow?ofMixed=3', [], nameUnorderedMatch);
 
-  testPath('/rainbow?mixed.mixedProperty=mixedvalue', ['jael'], matchesUnordered);
+  testPath('/rainbow?mixed.mixedProperty=mixedvalue', ['jael'], nameUnorderedMatch);
 
-  testPath('/rainbow?ofMixed.anything=i want', ['albert'], matchesUnordered);
+  testPath('/rainbow?ofMixed.anything=i want', ['albert'], nameUnorderedMatch);
 
-  /* should throw error 
-  testPath('/rainbow?age={all}18', ['albert']);
-  */
-
-  testPath('/rainbow?age=18', ['albert'], matchesUnordered);
+  testPath('/rainbow?age=18', ['albert'], nameUnorderedMatch);
   
-  testPath('/rainbow?ofNumber=12', ['albert', 'jael'], matchesUnordered);
+  testPath('/rainbow?ofNumber=12', ['albert', 'jael'], nameUnorderedMatch);
 
-  testPath('/rainbow?ofNumber=11', ['albert'], matchesUnordered);
+  testPath('/rainbow?ofNumber=11', ['albert'], nameUnorderedMatch);
 
-  /* should work after adding support for structured queries
-  testPath('/rainbow?ofNumber={all}12,11', ['albert']);
-  */
+  // should work after adding support for structured queries
+  testPath('/rainbow?ofNumber={all}12,11', ['albert'], nameUnorderedMatch);
 
-  testPath('/rainbow?ofString={in}{regex}^a,^b', ['albert', 'noe'], matchesUnordered);
+  testPath('/rainbow?ofString={in}{regex}^a,^b', ['albert', 'noe'], nameUnorderedMatch);
 
-  /* have to add support for the date schema
-  testPath('/rainbow?updated=2013-03-01T01:10:00', ['albert']);
+  /* missing date schemaType support
+  testPath('/rainbow?updated=2013-03-01T01:10:00', ['albert'], nameUnorderedMatch);
   */
 
   /* should fail because buffer is not supported as schematype
   testPath('/rainbow?binary=cus', ['albert']);
   */
 
-  // size operator
-  testPath('/rainbow?ofNumber={size}2', ['jael'], matchesUnordered);
+  testPath('/rainbow?ofNumber={size}2', ['jael'], nameUnorderedMatch);
 
   describe('text index search', function() {
 
       // any of the words
-      testPath('/rainbow?indexedText={text}pears apples', ['noe', 'jael'], matchesUnordered);
+      testPath('/rainbow?$text=pears apples', ['noe', 'jael'], nameUnorderedMatch);
 
       // matches phrase
-      testPath('/rainbow?indexedText={text}"some apples"', ['noe'], matchesUnordered);
+      testPath('/rainbow?$text="some apples"', ['noe'], nameUnorderedMatch);
 
       // all containing the word "text" excluding the ones containing the word apples
-      testPath('/rainbow?indexedText={text}text -apples', ['albert'], matchesUnordered);
+      testPath('/rainbow?$text=text -apples', ['albert'], nameUnorderedMatch);
 
       /*// it will search in italian language see http://docs.mongodb.org/manual/reference/operator/query/text/#op._S_text
       testPath('/rainbow?indexedText={text}pears apples,it', write rest of test );
       */
 
       // works combined with other criterias
-      testPath('/rainbow?indexedText={text}apples&ofNumber=12', ['jael'], matchesUnordered);
+      testPath('/rainbow?$text=apples&ofNumber=12', ['jael'], nameUnorderedMatch);
 
   });
 
 });
-
-
-function testPath(path, expected, matcher) {
-
-    it(path, function(done) {
-
-        request({ url: 'http://localhost:3000' + path, json: true }, function (error, response, content) {
-          matcher( expected, content, done );
-        });
-
-    });
-
-}
-
-function matchesUnordered(expected, got, done) {
-    expect(got.length).to.equal(expected.length);
-    var names = got.map(function(e) { return e.name; });
-    for ( var i = 0, ii = expected.length; i < ii ; i++ )
-        expect(names).to.contain(expected[i]);
-    done();
-}
-
-/** to remove
-function testPath(path, expected) {
-    it(path, function(done) {
-
-        request({ url: 'http://localhost:3000' + path, json: true }, function (error, response, content) {
-          expect(content.length).to.equal(expected.length);
-          for ( var i = 0, ii = content.length; i < ii ; i++ )
-              expect(content[i].name).to.equal(expected[i]);
-          done();
-        });
-
-    });
-}
-*/

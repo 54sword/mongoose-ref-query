@@ -8,7 +8,11 @@ module.exports = function(connection) {
     var personSchema = new mongoose.Schema({
         name:    String,
         age:     Number,
-        country: String
+        country: String,
+        foods: [new mongoose.Schema({
+            name: String,
+            calories: Number
+        })]
     });
 
     personSchema.plugin(mongooseApiQuery);

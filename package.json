@@ -22,7 +22,9 @@
     "request": "^2.37.0"
   },
   "dependencies": {
-    "mongoose": "3.6.x"
+    "lodash": "^2.4.1",
+    "mongoose": "3.6.x",
+    "q": "^1.0.1"
   },
   "homepage": "http://github.com/adamjacobbecker/mongoose-api-query"
 }
