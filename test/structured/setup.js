@@ -42,34 +42,17 @@ module.exports = function(connection) {
         }
     ];
 
-    // CONSTRUCTORS
-    
-    var create= function(el) {
-        var t = new Person(el),
-            d = Q.defer();
-        t.save(function(err, saved) {
-            if ( err ) d.reject( err );
-            else d.resolve( saved );
-        });
-        return d.promise;
-    };
-
     // PROMISE CHAINING
-    var saveElements = createCollection(create);
+    var create= function(el) {
+            return new Person(el).saveQ();
+        },
+        saveElements = createCollection(create);
 
     // CLEANUP
-    return Q.ninvoke(Person.collection, "remove").then(init);
+    return Person.removeQ().then(function init() {
+        return saveElements(people);
+    });
 
-    function init() {
-
-        console.log("STARTING FEEDING DATA TO MONGO");
-
-        return saveElements(people)
-        .then(function(ids) {
-            console.log("ALL PEOPLE SAVED");
-        });
-
-    }
 };
 
 /**

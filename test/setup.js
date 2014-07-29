@@ -2,6 +2,9 @@ var glob = require('glob'),
     mongoose = require('mongoose'),
     Q = require('q');
 
+// global testing functions
+require("./functions.js");
+
 var config = require('./mongo.json'),
     connection = mongoose.createConnection(config.host, config.db);
 

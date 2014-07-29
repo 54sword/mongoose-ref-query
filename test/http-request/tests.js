@@ -1,6 +1,5 @@
 var expect = require("expect.js"),
-    mongooseApiQuery = require("../../lib/mongoose-api-query.js"), 
-    testing = require('../functions.js');
+    mongooseApiQuery = require("../../lib/mongoose-api-query.js"); 
 
 describe('http GET request parsing', function(){
 

@@ -1,7 +1,6 @@
 module.exports = function(connection) {
 
-    //var mongoose = require('mongoose-q')(require('mongoose')),
-    var mongoose = require('mongoose'),
+    var mongoose = require('mongoose-q')(require('mongoose')),
         mongooseApiQuery = require('../../lib/mongoose-api-query'),
         Schema = mongoose.Schema;
 

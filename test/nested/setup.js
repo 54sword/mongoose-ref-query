@@ -55,34 +55,16 @@ module.exports = function(connection) {
         }
     ];
 
-    // CONSTRUCTORS
-    
-    var createSmurf = function(smurf) {
-        var t = new Smurf(smurf),
-            d = Q.defer();
-        t.save(function(err, saved) {
-            if ( err ) d.reject( err );
-            else d.resolve( saved );
-        });
-        return d.promise;
-    };
-
     // PROMISE CHAINING
-    var saveSmurfs = createCollection(createSmurf);
+    var createSmurf = function(smurf) {
+            return new Smurf(smurf).saveQ();
+        },
+        saveSmurfs = createCollection(createSmurf);
 
-    // CLEANUP
-    return Q.ninvoke(Smurf.collection, "remove").then(init);
+    return Smurf.removeQ().then(function() {
+        return saveSmurfs(smurfs);
+    });
 
-    function init() {
-
-        console.log("STARTING FEEDING DATA TO MONGO");
-
-        return saveSmurfs(smurfs)
-        .then(function(ids) {
-            console.log("ALL SMURFS SAVED");
-        });
-
-    }
 };
 
 /**

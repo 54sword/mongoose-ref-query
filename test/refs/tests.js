@@ -1,8 +1,5 @@
-var mongooseApiQuery = require("../../lib/mongoose-api-query.js"),
-    mongoose = require('mongoose'),
-    config = require('../mongo.json'),
-    expect = require('expect.js'),
-    testing = require('../functions.js');
+var mongoose = require('mongoose'),
+    config = require('../mongo.json');
 
 var connection = mongoose.createConnection(config.host, config.db);
 

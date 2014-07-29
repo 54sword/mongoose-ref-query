@@ -1,6 +1,3 @@
-var expect = require("expect.js"),
-    testing = require("../functions.js");
-
 
 describe('subpaths', function(){
 

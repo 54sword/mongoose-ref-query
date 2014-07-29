@@ -4,6 +4,8 @@ DEV NOTES
 TODO
 ----
 
+- move the reduce chaining method to the functions.js file
+- check other forks for usefull features
 - write a test for exact number matching
 - add testing for errors
 - tests for population

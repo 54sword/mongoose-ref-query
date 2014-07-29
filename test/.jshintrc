@@ -1,4 +1,7 @@
 {
+    "strcit": true,
     "node": true,
-    "undef": false
+    "unused": true,
+    "undef": true,
+    "predef": ["describe", "it", "createCollection", "objectsSame", "testPath", "nameUnorderedMatch", "nameOrderedMatch", "containsName", "isOfNumber", "inOrder", "testExpression"]
 }

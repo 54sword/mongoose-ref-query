@@ -52,34 +52,16 @@ module.exports = function(connection) {
         }
     ];
 
-    // CONSTRUCTORS
-    
-    var create= function(el) {
-        var t = new Rainbow(el),
-            d = Q.defer();
-        t.save(function(err, saved) {
-            if ( err ) d.reject( err );
-            else d.resolve( saved );
-        });
-        return d.promise;
-    };
-
     // PROMISE CHAINING
-    var saveElements = createCollection(create);
+    var create= function(el) {
+            return new Rainbow(el).saveQ();
+        },
+        saveElements = createCollection(create);
 
     // CLEANUP
-    return Q.ninvoke(Rainbow.collection, "remove").then(init);
-
-    function init() {
-
-        console.log("STARTING FEEDING DATA TO MONGO");
-
-        return saveElements(rainbows)
-        .then(function(ids) {
-            console.log("ALL RAINBOWS SAVED");
-        });
-
-    }
+    return Rainbow.removeQ().then(function init() {
+        return saveElements(rainbows);
+    });
 };
 
 /**

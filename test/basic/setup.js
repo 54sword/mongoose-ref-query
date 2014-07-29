@@ -1,31 +1,18 @@
 module.exports = function(connection) {
 
-    var mongoose = require('mongoose'),
+    var mongoose = require('mongoose-q')(require('mongoose')),
         Q = require('q');
 
     var Monster = require('./model')(connection),
         monsters = require('./fixtures');
 
-    var d = Q.defer();
-
-    var addMonsters = function (monsters) {
-      var m = new Monster(monsters.shift());
-      m.save(function(err) {
-        if ( err ) d.reject(err);
-        if (monsters.length === 0) {
-            console.log("ALL MONSTERS SAVED");
-            d.resolve();
-        } else {
-          addMonsters(monsters);
-        }
-      });
-    };
-
-    Monster.collection.remove(function(err) {
-        if ( err ) d.reject( err );
-        console.log("STARTING FEEDING DATA TO MONGO");
-        addMonsters(monsters);
+    return Monster.removeQ()
+    .then(function() {
+        return monsters.reduce(function(promise, next_monster) {
+            return promise.then(function(last_monster) {
+                return new Monster(next_monster).saveQ();
+            });
+        }, Q(true));
     });
 
-    return d.promise;
 };
