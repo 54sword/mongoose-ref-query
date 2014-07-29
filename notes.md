@@ -287,6 +287,7 @@ which is can also be written as
 
 #### Structured
 
+```
 {
     operators : ['or'],
     args: [
@@ -319,6 +320,8 @@ which is can also be written as
     ]
 }
 ```
+
+```
 {
     $or : [
         {
@@ -336,13 +339,9 @@ which is can also be written as
                 }
             }
         }
-    }
+    ]
 }
 ```
-
-
-
-
 
 ## NOTES
 - $size behaves like a comparison operator not an array one.
@@ -375,6 +374,31 @@ if path and is final ( doesn't contain a dot ) ( operators[0] in comparison_oper
 
 
 
+## REFERENCE QUERY TRANSFORMATIONS
 
+#### SINGLE ELEMENT REFERENCE
 
+should behave as if the reference was part of the document (not a reference)
 
+- { work.boss.name : "joe" } 
+- { $and: [ { work.boss.name : "joe" }, { work.boss.age : { $gt: 20 } } ] }
+- { $or: [ { work.boss.name : "joe" }, { work.boss.age : { $gt: 20 } } ] }
+
+#### ARRAY OF REFERENCES
+
+only reasons to end path on reference:
+    - $elemMatch { work.employees : { $elemMatch: { name: "mark", age: { $gt: 20 } } } } // must have an employee matching both at the same time
+    - $size { work.employees : { $size: 30 } } // must have 30 employees => no need for dep. query, just count the ids
+    - { employees: { $elemMatch: { name: "mark", age: { $gt: 20 } }, $size: 20 } }
+      // must be of 20 elements, one must be of age 20
+      // => $and with other conditions of same level can be merged into one $and as follows
+      { $and: [ { $elemMatch: { name: "mark", age: { $gt: 20 } } }, { $size: 20 }, { age: 20 }, { name: /^B/ } ] }
+    - { $elemMatch: { name: "mark", age: { $gt: 20 } } } vs. { name: "mark", age: { $gt: 20 } }
+      // elemMatch must be queried as its expression with one query
+      // whereas the simple query must be projected to an $and an a query for each condition
+otherwise you must specify a subfield to match
+    - { work.employees.name: "mark", work.employees.age: 20 } // one employee must be named mark and one must be 20 ( can but don't have to be the same person )
+
+- $and { work.employees : { $and: [ { name: "mark" }, { age: { $gt: 20 } } ] } } // must have an employee with name mark and one older than 20 (can be same employee)
+- $or { work.employees : { $or: [ { name: "mark" }, { age: { $gt: 20 } } ] }
+for $and and $or you make an $and/$or on the result of the subqueries

@@ -23,12 +23,13 @@ module.exports = function(connection) {
                 {
                     name: "alpha_marketing",
                     members: [
-                        { name: "antonio", surname: "ferrari" },
-                        { name: "francesco", surname: "russo" },
-                        { name: "marco", surname: "colombo" }
+                        { name: "antonio", surname: "ferrari", age: 50 },
+                        { name: "francesco", surname: "russo", age: 30 },
+                        { name: "marco", surname: "colombo", age: 20 }
                     ]
                 }
-            ]
+            ],
+            revenue: 1000000
         },
         {
             name: "beta", 
@@ -36,12 +37,14 @@ module.exports = function(connection) {
                 {
                     name: "beta_programmers",
                     members: [
-                        { name: "Achilles", surname: "Papadopoulos" },
-                        { name: "Agenor", surname: "Vlahos" },
-                        { name: "Polybus", surname: "Dimitriadis" }
+                        { name: "Achilles", surname: "Papadopoulos", age: 22 },
+                        { name: "Agenor", surname: "Vlahos", age: 19 },
+                        { name: "Cicero", surname: "Vlahos", age: 19 },
+                        { name: "Polybus", surname: "Dimitriadis", age: 42 }
                     ]
                 }
-            ]
+            ],
+            revenue: 500000
         },
         {
             name: "gamma", 
@@ -49,13 +52,14 @@ module.exports = function(connection) {
                 {
                     name: "gamma_programmers",
                     members: [
-                        { name: "Bran", surname: "Murphy" },
-                        { name: "Cillian", surname: "Walsh" },
-                        { name: "Fiach", surname: "Smith" },
-                        { name: "Torna", surname: "Doyle" }
+                        { name: "Bran", surname: "Murphy", age: 28 },
+                        { name: "Cillian", surname: "Walsh", age: 22 },
+                        { name: "Fiach", surname: "Smith", age: 21 },
+                        { name: "Torna", surname: "Doyle", age: 29 }
                     ]
                 }
-            ]
+            ],
+            revenue: 20000
         }
     ];
 
@@ -66,7 +70,7 @@ module.exports = function(connection) {
         .then(function(saved_teams) {
             console.log("got saved teams:");
             console.dir( saved_teams );
-            var c = new Company({name: company.name, teams: saved_teams}),
+            var c = new Company({name: company.name, revenue: company.revenue, teams: saved_teams}),
                 d = Q.defer();
             c.save(function(err, saved) {
                 if ( err ) d.reject(err);

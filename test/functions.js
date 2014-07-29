@@ -6,7 +6,8 @@ var expect = require("expect.js"),
  * doesn't compare regexes ( only that are both of the type RegExp )
  * always pass expected for a and got for b
  */
-global.objectsSame = function (a, b) {
+global.objectsSame = function objectsSame(a, b) {
+    /* exported objectsSame */
     var akeys = Object.keys(a).sort(),
         bkeys = Object.keys(b).sort();
 
@@ -56,6 +57,7 @@ function getType(obj) {
  * result is correct.
  */
 global.testPath = function(path, expected, matcher) {
+    /* exported testPath */
 
     it(path, function(done) {
 
@@ -110,4 +112,18 @@ global.inOrder = function (expected, got, done) {
   expect(index2).to.not.equal(-1);
   expect(index1).to.be.lessThan(index2);
   done();
+};
+
+global.testExpression = function(description, model, expression, expected) {
+    it(description, function() {
+
+        var trigger = model.apiQueryPrepare( expression );
+
+        return trigger().then(function(resp) {
+            expect(resp.length).to.be(expected.length);
+            for ( var i = 0, ii = resp.length; i < ii; i++ )
+                expect(expected.indexOf(resp[i].name)).to.not.be(-1);
+        });
+
+    });
 };

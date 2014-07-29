@@ -10,7 +10,8 @@ module.exports = function(connection) {
     var schemas = {
         Company : new Schema({
                           name: String,
-                          teams: [{ type: ObjectId, ref: 'Team'}]
+                          teams: [{ type: ObjectId, ref: 'Team'}],
+                          revenue: Number
                         }),
         Team : new Schema({
                        name: String,
@@ -19,7 +20,8 @@ module.exports = function(connection) {
         Employee : new Schema({
                            name: String,
                            surname: String,
-                           manager: { type: ObjectId, ref: 'Employee' }
+                           manager: { type: ObjectId, ref: 'Employee' },
+                           age: Number
                          })
     };
 
