@@ -23,6 +23,7 @@ TODO
     - buffer
 - geo indexes ? operators ?
 - score processing on $text search
+- mongoose populate seems to support only direct references ( you cannot say populate=manager.manager )
 
 - structured queries
     - all operator ( cast the args on array queries    /smurfs?eats={all}{regex}uk$,en$

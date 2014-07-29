@@ -23,6 +23,28 @@ describe('references', function(){
 
 });
 
+describe('population', function() {
+
+  testPath('/employee?manager.name=antonio', null, function(expected, got, done) {
+
+    got.forEach(function(employee) {
+        expect(employee.manager).to.not.have.property("name");
+    });
+    done();
+
+  });
+
+  testPath('/employee?manager.name=antonio&populate=manager', null, function(expected, got, done) {
+
+    got.forEach(function(employee) {
+        expect(employee.manager).to.have.property("name", "antonio");
+    });
+    done();
+
+  });
+
+});
+
 describe('complex references', function() {
 
     /* must contain at least one employee with name starting with C
