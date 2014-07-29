@@ -1,7 +1,9 @@
+"use strict";
+
 var express = require('express'),
     http = require('http'),
     glob = require('glob'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose-q')();
 
 var config = require('./mongo.json'),
     connection = mongoose.createConnection(config.host, config.db);
@@ -20,7 +22,7 @@ app.configure('development', function(){
 
 // each test suite can register it's own routes
 glob.sync('./*/routes.js', { cwd: __dirname }).forEach(function(route) {
-   require(route)(app, connection); 
+   require(route)(app, connection);
 });
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -1,3 +1,4 @@
+"use strict";
 
 describe('basic functionality', function(){
 
@@ -62,11 +63,11 @@ describe('basic functionality', function(){
   describe('SchemaString', function(){
 
       testPath("/monster?name=big%20purple", 0, isOfNumber);
-  
+
       testPath("/monster?name=big%20pUrple%20People%20Eater", 0, isOfNumber);
-  
+
       testPath("/monster?name=Big%20Purple%20People%20Eater", ["Big Purple People Eater"], nameUnorderedMatch);
-  
+
       testPath("/monster?name={iregex}biggie%20smalls", ["Biggie Smalls", "Biggie Smalls the 2nd"], nameUnorderedMatch);
 
   });
@@ -75,35 +76,35 @@ describe('basic functionality', function(){
 
       // returns correct result for a basic search
       testPath("/monster?monster_identification_no=301", ["Frankenstein"], nameUnorderedMatch);
-  
+
       // does not do partial matching by default
       testPath("/monster?monster_identification_no=30", 0, isOfNumber);
-  
+
       // returns correct results for {mod}
-          
+
       testPath("/monster?monster_identification_no={mod}150,1", [ "Big Purple People Eater", "Frankenstein" ], nameUnorderedMatch);
-  
+
       // returns correct results for {gt}
       testPath("/monster?monster_identification_no={gt}100439", ["Biggie Smalls the 2nd"], nameUnorderedMatch);
-  
+
       // returns correct results for {gte}
       testPath("/monster?monster_identification_no={gte}100439", ["Biggie Smalls", "Biggie Smalls the 2nd"], nameUnorderedMatch);
-  
+
       // returns correct results for {lt}
       testPath("/monster?monster_identification_no={lt}200", ["Big Purple People Eater"], nameUnorderedMatch);
-  
+
       // returns correct results for {lte}
       testPath("/monster?monster_identification_no={lte}200", ["Big Purple People Eater", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
-  
+
       // returns correct results for {in}
       testPath("/monster?monster_identification_no=1,301", ["Big Purple People Eater", "Frankenstein"], nameUnorderedMatch);
-  
+
       // excludes results matching values specified in {nin} for Numbers
       testPath("/monster?monster_identification_no={nin}1,301", ["Biggie Smalls", "Biggie Smalls the 2nd", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
-  
+
       // excludes results matching values specified in {nin} for Strings, case insensitive
       testPath("/monster?name={nin}Big Purple People Eater,Frankenstein", ["Biggie Smalls", "Biggie Smalls the 2nd", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
-  
+
       // none of the foods are Kare or Beets
       testPath("/monster?foods.name={nin}Kale,Beets", ["Bessie the Lochness Monster", "Clay Johnson", "Biggie Smalls the 2nd"], nameUnorderedMatch);
 
@@ -113,22 +114,22 @@ describe('basic functionality', function(){
 
       // parses "true" as true
       testPath("/monster?eats_humans=true", ["Big Purple People Eater", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
-      
+
       // parses "t" as true
       testPath("/monster?eats_humans=t", ["Big Purple People Eater", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
-      
+
       // parses "yes" as true
       testPath("/monster?eats_humans=yes", ["Big Purple People Eater", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
-      
+
       // parses "y" as true
       testPath("/monster?eats_humans=y", ["Big Purple People Eater", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
-      
+
       // parses "1" as true
       testPath("/monster?eats_humans=1", ["Big Purple People Eater", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
-      
+
       // parses anything else as false
       testPath("/monster?eats_humans=kljahsdflakjsf", ["Frankenstein", "Biggie Smalls", "Biggie Smalls the 2nd"], nameUnorderedMatch);
-      
+
       // ignores a blank param
       testPath("/monster?eats_humans=", 6, isOfNumber);
 
@@ -137,33 +138,33 @@ describe('basic functionality', function(){
   describe('SubSchema', function(){
 
       describe('SchemaString', function(){
-          
+
           // does a basic filter
           testPath("/monster?foods.name=Kale", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
-          
+
           // Defaults to {in}
           testPath("/monster?foods.name=Kale,Beets", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
-      
+
           // calculates {in} correctly
           testPath("/monster?foods.name={in}{regex}^K,^W", ["Big Purple People Eater", "Frankenstein",  "Biggie Smalls"], nameUnorderedMatch);
 
       });
-      
-      
+
+
       describe('SchemaNumber', function(){
-      
+
           // does a basic filter
           testPath("/monster?foods.calories={gt}350", ["Biggie Smalls the 2nd"], nameUnorderedMatch);
-      
+
       });
-      
+
       describe('SchemaBoolean', function(){
-      
+
           // does a basic filter
           testPath("/monster?foods.vegetarian=t", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
-      
+
       });
-      
+
  });
 
 });

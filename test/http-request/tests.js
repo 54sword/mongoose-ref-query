@@ -1,5 +1,6 @@
-var expect = require("expect.js"),
-    mongooseApiQuery = require("../../lib/mongoose-api-query.js"); 
+"use strict";
+
+var mongooseApiQuery = require("../../lib/mongoose-api-query.js");
 
 describe('http GET request parsing', function(){
 
@@ -77,6 +78,26 @@ describe('http GET request parsing', function(){
             $and: [
                 { a : { $in : ["b","c","d"] } },
                 { a : { $in : [/^A/i,/^B/i] } }
+            ]
+        };
+
+        output = mongooseApiQuery.__parseQuery( input );
+
+        objectsSame( expected, output.mongo_expression );
+
+    });
+
+    it("if a condition doesn't start with a primary operator the first operator will be null", function() {
+
+        var input, output, expected;
+
+        input = {
+            "manager.manager.name" : "Achilles"
+        };
+
+        expected = {
+            $and: [
+                { "manager.manager.name" : { $in : ["Achilles"] } }
             ]
         };
 
@@ -167,6 +188,26 @@ describe('http GET request parsing', function(){
         expected = {
             $and: [
                 { a : { $in: ["val{ue", "sec,ond", "thi\\rd"] } }
+            ]
+        };
+
+        output = mongooseApiQuery.__parseQuery( input );
+
+        objectsSame( expected, output.mongo_expression );
+
+    });
+
+    it("interprets escape sequences as it should", function() {
+
+        var input, output, expected;
+
+        input = {
+            $text : "searched\\, text,it"
+        };
+
+        expected = {
+            $and: [
+                { $text : { $search: "searched, text", $language: "it" } }
             ]
         };
 

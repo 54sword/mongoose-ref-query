@@ -1,6 +1,8 @@
+"use strict";
+
 module.exports = function(connection) {
 
-    var mongoose = require('mongoose'),
+    var mongoose = require('mongoose-q')(),
         mongooseApiQuery = require('../../lib/mongoose-api-query');
 
     var monsterSchema = new mongoose.Schema({
@@ -21,4 +23,4 @@ module.exports = function(connection) {
 
     return connection.model('Monster', monsterSchema);
 
-}
+};

@@ -4,7 +4,8 @@ DEV NOTES
 TODO
 ----
 
-- move the reduce chaining method to the functions.js file
+- there's an empty criteria in the $and array of the manager.manager.name query of refs
+- write test that prepares multiple queries and then runs them at once
 - check other forks for usefull features
 - write a test for exact number matching
 - add testing for errors

@@ -1,4 +1,6 @@
-var mongoose = require('mongoose'),
+"use strict";
+
+var mongoose = require('mongoose-q')(),
     config = require('../mongo.json');
 
 var connection = mongoose.createConnection(config.host, config.db);

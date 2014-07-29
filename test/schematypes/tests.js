@@ -1,3 +1,4 @@
+"use strict";
 
 describe('schemeTypes', function(){
 
@@ -17,7 +18,7 @@ describe('schemeTypes', function(){
   testPath('/rainbow?ofMixed.anything=i want', ['albert'], nameUnorderedMatch);
 
   testPath('/rainbow?age=18', ['albert'], nameUnorderedMatch);
-  
+
   testPath('/rainbow?ofNumber=12', ['albert', 'jael'], nameUnorderedMatch);
 
   testPath('/rainbow?ofNumber=11', ['albert'], nameUnorderedMatch);

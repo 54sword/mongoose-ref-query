@@ -1,5 +1,15 @@
+"use strict";
+
 var expect = require("expect.js"),
-    request = require("request");
+    request = require("request"),
+    Q = require("q");
+
+global.expect = expect;
+
+var unique = 0;
+global.getUnique = function () {
+    return unique++;
+};
 
 /*
  * checks whether two objects/arrays have the same structure,
@@ -31,7 +41,7 @@ global.objectsSame = function objectsSame(a, b) {
     for ( var i = 0, ii = akeys.length; i < ii ; i++ ) {
         var aa = a[ akeys[i] ],
             bb = b[ akeys[i] ];
-        
+
         var typeaa = getType( aa ),
             typebb = getType( bb );
         if ( typeaa !== typebb )
@@ -134,7 +144,7 @@ global.testExpression = function(description, model, expression, expected) {
  * passing the element to `contructor` and chaining the constuctors as promise chains
  *
  * constructor(collection[0]).then( constructor(collection[1]) ).then( constructor[2] )...
- * 
+ *
  * the last (returned) promise is resolved to an array of saved alement's ids
  */
 global.createCollection = function createCollection(constructor) {

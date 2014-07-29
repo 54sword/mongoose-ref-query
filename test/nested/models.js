@@ -1,6 +1,8 @@
+"use strict";
+
 module.exports = function(connection) {
 
-    var mongoose = require('mongoose-q')(require('mongoose')),
+    var mongoose = require('mongoose-q')(),
         mongooseApiQuery = require('../../lib/mongoose-api-query'),
         Types = mongoose.Schema.Types;
 

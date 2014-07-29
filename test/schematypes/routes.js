@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function(app, connection) {
 
     var models = require('./models')(connection);

@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function(app, connection) {
 
     var Monster = require('./model')(connection);

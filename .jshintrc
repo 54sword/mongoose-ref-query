@@ -1,4 +1,7 @@
 {
+    "strict": true,
+    "unused": true,
     "node": true,
-    "undef": true
+    "undef": true,
+    "quotmark": "double"
 }

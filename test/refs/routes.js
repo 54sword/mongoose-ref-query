@@ -1,11 +1,11 @@
+"use strict";
+
 module.exports = function(app, connection) {
 
     var models = require('./models')(connection);
 
     for ( var i in models ) {
     (function(name, model) {
-
-        var model = models[name];
 
         app.get('/'+name.toLowerCase(), function handler(req, res) {
 
@@ -16,6 +16,6 @@ module.exports = function(app, connection) {
         });
 
     })(i, models[i]);
-    };
+    }
 
 };

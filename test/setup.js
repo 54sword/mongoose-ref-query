@@ -1,9 +1,11 @@
+"use strict";
+
 var glob = require('glob'),
-    mongoose = require('mongoose'),
+    mongoose = require('mongoose-q')(),
     Q = require('q');
 
 // global testing functions
-require("./functions.js");
+require("./testing.js");
 
 var config = require('./mongo.json'),
     connection = mongoose.createConnection(config.host, config.db);
@@ -26,17 +28,17 @@ function serialize(scripts) {
 
     return scripts.slice(1).reduce(function(q, script, i) {
 
-        return q.then(function(last_result) {
+        return q.then(function() {
 
             console.log( formatName(scripts[i]) + " DONE !\n");
 
             console.log( formatName(scripts[i+1]) + " STARTING");
-            return require(script)(connection); 
+            return require(script)(connection);
 
         });
 
     }, require(scripts[0])(connection))
-    .then(function(last_result) {
+    .then(function() {
         console.log( formatName(scripts[scripts.length-1]) + " DONE !\n");
     });
 

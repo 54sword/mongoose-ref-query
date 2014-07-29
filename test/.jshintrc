@@ -1,7 +1,9 @@
 {
-    "strcit": true,
     "node": true,
+    "strict": true,
+    "newcap": false,
     "unused": true,
     "undef": true,
-    "predef": ["describe", "it", "createCollection", "objectsSame", "testPath", "nameUnorderedMatch", "nameOrderedMatch", "containsName", "isOfNumber", "inOrder", "testExpression"]
+    "loopfunc": true,
+    "predef": ["expect", "describe", "it", "createCollection", "objectsSame", "testPath", "nameUnorderedMatch", "nameOrderedMatch", "containsName", "isOfNumber", "inOrder", "testExpression", "getUnique"]
 }

@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function(connection) {
 
     var Q = require('q');
@@ -12,7 +14,7 @@ module.exports = function(connection) {
 
     var companies = [
         {
-            name: "alpha", 
+            name: "alpha",
             teams: [
                 {
                     name: "alpha_programmers",
@@ -32,7 +34,7 @@ module.exports = function(connection) {
             revenue: 1000000
         },
         {
-            name: "beta", 
+            name: "beta",
             teams: [
                 {
                     name: "beta_programmers",
@@ -47,7 +49,7 @@ module.exports = function(connection) {
             revenue: 500000
         },
         {
-            name: "gamma", 
+            name: "gamma",
             teams: [
                 {
                     name: "gamma_programmers",
@@ -64,7 +66,7 @@ module.exports = function(connection) {
     ];
 
     // CONSTRUCTORS
-    
+
     var createCompany = function(company) {
         return saveTeams(company.teams)
         .then(function(saved_teams) {
@@ -99,21 +101,31 @@ module.exports = function(connection) {
     ]).then(function init() {
 
         return saveCompanies(companies)
-        .then(function() {
-            return assignManager("marco", "antonio");
-        });
+
+        .then(assignManager("marco", "antonio"))
+        .then(assignManager("francesco", "antonio"))
+
+        .then(assignManager("Agenor", "Achilles"))
+        .then(assignManager("Cicero", "Agenor"))
+        .then(assignManager("Polybus", "Agenor"))
+
+        .then(assignManager("Cillian", "Bran"))
+        .then(assignManager("Fiach", "Bran"))
+        .then(assignManager("Torna", "Fiach"));
 
     });
 
     function assignManager(employee_name, manager_name) {
-        return Q.all([
-            Employee.findOneQ({name: employee_name}),
-            Employee.findOneQ({name: manager_name})
-        ])
-        .spread(function(employee, manager) {
-            employee.manager = manager._id;
-            return employee.saveQ();
-        });
+        return function() {
+            return Q.all([
+                Employee.findOneQ({name: employee_name}),
+                Employee.findOneQ({name: manager_name})
+            ])
+            .spread(function(employee, manager) {
+                employee.manager = manager._id;
+                return employee.saveQ();
+            });
+        };
     }
 
 };

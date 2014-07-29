@@ -1,4 +1,6 @@
-var mongoose = require('mongoose'),
+"use strict";
+
+var mongoose = require('mongoose-q')(),
     config = require('../mongo.json');
 
 var connection = mongoose.createConnection(config.host, config.db);
@@ -13,7 +15,9 @@ describe('references', function(){
 
   testPath('/company?teams.members.name=marco', ["alpha"], nameUnorderedMatch);
 
-  testPath('/employee?manager.name=antonio', ["marco"], nameUnorderedMatch);
+  testPath('/employee?manager.name=antonio', ["marco","francesco"], nameUnorderedMatch);
+
+  testPath('/employee?manager.manager.name=Achilles', ["Cicero","Polybus"], nameUnorderedMatch);
 
   testPath('/team?members.age=22', ["beta_programmers", "gamma_programmers"], nameUnorderedMatch);
 

@@ -10,20 +10,17 @@
     "parameters"
   ],
   "scripts": {
-    "test": "mocha --reporter list --require test/functions.js test/*/tests.js"
+    "test": "mocha --reporter list --require test/testing.js test/*/tests.js"
   },
   "devDependencies": {
     "expect.js": "*",
     "express": "3.3.x",
     "glob": "^4.0.3",
-    "lodash": "^2.4.1",
     "mocha": "*",
-    "q": "^1.0.1",
     "request": "^2.37.0",
     "mongoose-q": "0.0.10"
   },
   "dependencies": {
-    "lodash": "^2.4.1",
     "mongoose": "3.6.x",
     "q": "^1.0.1"
   },
