@@ -1,10 +1,12 @@
 # HTTP interface syntax
 
-The http query object is transformed into a mongo $and expression like so:
+Http query objects like this
 
 ```
 /monsters?name=joe&age={gt}20{lt}100
 ```
+
+are transformed into a mongo $and expressions like this:
 
 ```
 { $and: [
@@ -78,34 +80,33 @@ In your code you should **ALWAYS** use an explicit primary operator for each cri
 suppose eats is an array of strings
 
 ```
-/monsters?eats={all}Carrot,Tomato{regex}n$
+/monsters?eats={nin}Carrot,Tomato{regex}n$
 ```
 
-maps to all the monsters that eat Carrots **and** Tomato and also eats at least one item ending with *n*.
+maps to all the monsters that eat only food different than Carrots and Tomatos and at least one of the foods must end with n.
 
 But if the user doesn't supply any data, the query would result in
 
 ```
-/monsters?eats={all}{regex}n$
+/monsters?eats={nin}{regex}n$
 ```
 
-Which would return all the monstears that eats **only** items ending with *n*. This can be fixed by explicitly defining a primary operator *in*.
+Which would return all the monsters that eat only items not ending with `n`. This can be fixed by explicitly defining a primary operator `in`.
 
 ```
-/monsters?eats={all}Carrot,Tomato{in}{regex}n$ -> /monsters?eats={all}{in}{regex}n$
+/monsters?eats={all}Carrot,Tomato{in}{regex}n$
+/monsters?eats={all}{in}{regex}n$
 ```
 
 For this purpose we also add the primary operator `eq` as the explicit form of the default matching with a single value.
-
-**TODO write tests for this.**
 
 ## Secondary operators
 
 These are operators that can be used to alter how the passed in value is handled.
 
-- regex - converts the argument into a regular expression
-- iregex - converts the argument into a case insensitive regular expression
-- null - will insert a null into the query ( the argument must be empty string )
+- `regex` - converts the argument into a regular expression
+- `iregex` - converts the argument into a case insensitive regular expression
+- `null` - will insert a null into the query ( the argument must be empty string )
 
 ## SCHEMATYPES
 
