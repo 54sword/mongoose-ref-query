@@ -68,4 +68,4 @@ See [dev](docs/dev.md)
 
 ## License
 
-MIT [mit-license.org](//mit-license.org/)
+MIT [mit-license.org](http://mit-license.org/)

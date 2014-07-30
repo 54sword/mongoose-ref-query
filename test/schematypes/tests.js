@@ -23,12 +23,17 @@ describe('schemeTypes', function(){
 
   testPath('/rainbow?ofNumber=11', ['albert'], nameUnorderedMatch);
 
-  // should work after adding support for structured queries
   testPath('/rainbow?ofNumber={all}12,11', ['albert'], nameUnorderedMatch);
+
+  testPath('/rainbow?ofNumber={nin}33,11', ['jael'], nameUnorderedMatch);
 
   testPath('/rainbow?ofString={in}{regex}^a,^b', ['albert', 'noe'], nameUnorderedMatch);
 
   testPath('/rainbow?ofString={in}', ['jael'], nameUnorderedMatch);
+
+  testPath('/rainbow?ofString={in}{null}', ['noe'], nameUnorderedMatch);
+
+  testPath('/rainbow?name={nin}{regex}^n,^j', ['albert'], nameUnorderedMatch);
 
   /* missing date schemaType support
   testPath('/rainbow?updated=2013-03-01T01:10:00', ['albert'], nameUnorderedMatch);

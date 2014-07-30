@@ -37,7 +37,7 @@ module.exports = function(connection) {
                 }
             ],
             ofNumber: [33, 22, 82],
-            ofString: ['bbc', 'def'],
+            ofString: ['bbc', 'def', null],
             indexedText: "This text contains some apples."
         },
         {

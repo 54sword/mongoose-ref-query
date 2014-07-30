@@ -1,16 +1,20 @@
 # HTTP interface syntax
 
-## Numeric operators:
+The http query object is transformed into a mongo $and expression like so:
 
 ```
-/monsters?monster_id={gte}30&age={lt}50
+/monsters?name=joe&age={gt}20{lt}100
 ```
 
-Combine operators:
+```
+{ $and: [
+        { name: 'joe' },
+        { age: { $gt: 20 } },
+        { age: { $lt: 100 } }
+] }
+```
 
-```
-/monsters?monster_id={gte}30{lt}50
-```
+Multiple argument operators take arguments as comma separated list, the comma can be escaped with a backslash.
 
 ## Coordinates
 
@@ -25,35 +29,11 @@ geo near, with (optional) radius in miles:
 
 ## Dot notation
 
+It supports the standart mongo dot notation
+
 ```
 /teams?members.0.name=joe - only the teams whose first members' name is joe
 /teams?members.name=joe - only the teams whose any members' name is joe
-```
-
-## Pagination
-
-```
-/monsters?page=2
-/monsters?page=4&per_page=25 		// per_page defaults to 10
-```
-
-## Sorting results
-
-```
-/monsters?sort_by=name
-/monsters?sort_by=name,desc
-```
-
-## Default order
-
-Mongo by default returns it's results as they are located on the disk which can change due to reallocation ( see [natural order](http://docs.mongodb.org/manual/reference/glossary/#term-natural-order) ).
-Sorting by ObjectId returns them in order of creation if the ids are server generated ( see [ObjectId](http://docs.mongodb.org/manual/reference/glossary/#term-objectid) ), but mongoose sends it's own
-to the server, so i suppose it's not the case.
-
-## Population
-
-```
-/monsters?populate=family,neighbours
 ```
 
 ## Schemaless search
@@ -63,11 +43,35 @@ all the operators will be avaiable and no further checking will be made.
 
 Querying subpaths of a path defined as empty array ( without specifying element's schema ) will behave the same.
 
-## Search Operators
+## Params
 
-This is a list of the optional search operators you can use for each SchemaType.
+### Pagination
 
-### ATTENTION
+```
+/monsters?page=2
+/monsters?page=4&per_page=25 		// per_page defaults to 10
+```
+
+### Sorting results
+
+```
+/monsters?sort_by=name
+/monsters?sort_by=name,desc
+```
+
+#### Default order
+
+Mongo by default returns it's results as they are located on the disk which can change due to reallocation ( see [natural order](http://docs.mongodb.org/manual/reference/glossary/#term-natural-order) ).
+Sorting by ObjectId returns them in order of creation if the ids are server generated ( see [ObjectId](http://docs.mongodb.org/manual/reference/glossary/#term-objectid) ), but mongoose sends it's own
+to the server, so i suppose it's not the case.
+
+### Population
+
+```
+/monsters?populate=family,neighbours
+```
+
+## !! ATTENTION !!
 
 In your code you should **ALWAYS** use an explicit primary operator for each criteria, **NEVER** apply the default for the following reason:
 
@@ -95,10 +99,18 @@ For this purpose we also add the primary operator `eq` as the explicit form of t
 
 **TODO write tests for this.**
 
+## Secondary operators
+
+These are operators that can be used to alter how the passed in value is handled.
+
+- regex - converts the argument into a regular expression
+- iregex - converts the argument into a case insensitive regular expression
+- null - will insert a null into the query ( the argument must be empty string )
+
+## SCHEMATYPES
+
 ### Number
 
-- `number={all}123,456` - Both 123 and 456 must be present
-- `number={nin}123,456` - Neither 123 nor 456
 - `number={in}123,456` - Either 123 or 456
 - `number={gt}123` - > 123
 - `number={gte}123` - >= 123
@@ -106,18 +118,24 @@ For this purpose we also add the primary operator `eq` as the explicit form of t
 - `number={lte}123` - <=123
 - `number={ne}123` - Not 123
 - `number={mod}10,2` - Where (number / 10) has remainder 2
+- `number={all}123,456` - Both 123 and 456 must be present
+- `number={nin}123,456` - Neither 123 nor 456
 
 ### String
 
 - `string={all}match,batch` - Both match and batch must be present
 - `string={nin}match,batch` - Neither match nor batch
 - `string={in}match,batch` - Either match or batch
-- `string={not}coffee` - Not coffee
-- `string={exact}CoFeEe` - Case-sensitive exact match of "CoFeEe"
+- `string={ne}coffee` - Not coffee
 
-- `string={text}apple pear` - search on text index ( requires mongodb version >=2.4.6 )
-- `string={text}apple pear,it` - search on text index in italian
-- `string={text}"some apples"` - search on text index whole phrase
+- `string={in}{regex}^A,^B` - Starting either with A or B
+- `string={nin}{regex}^A,^B` - Starting neither with A or B
+- `string={in}{iregex}^A,^B` - Starting with A, B, a or b
+
+- `$text=apple pear` - search on text index ( requires mongodb version >=2.4.6 )
+- `$text=apple pear,it` - search on text index in italian
+- `$text="some apples"` - search on text index whole phrase
+- `$text=pears -apples` - search on text index containing pears but no apples
 
 ### Boolean
 
