@@ -28,10 +28,10 @@ describe('basic functionality', function(){
   testPath("/monster?loc={near}38.8977,-77.0366", 6, isOfNumber);
 
   // returns correct result for {near} within 1 mile radius
-  testPath("/monster?loc={near}38.8977,-77.0366,1", ["Big Purple People Eater"], nameUnorderedMatch);
+  testPath("/monster?loc={near}38.8977,-77.0366,0.0144927536", ["Big Purple People Eater"], nameUnorderedMatch);
 
   // returns correct result for {near} within 3 mile radius
-  testPath("/monster?loc={near}38.8977,-77.0366,3", [ "Big Purple People Eater", "Biggie Smalls", "Frankenstein", "Biggie Smalls the 2nd" ], nameUnorderedMatch);
+  testPath("/monster?loc={near}38.8977,-77.0366,0.0434782608", [ "Big Purple People Eater", "Biggie Smalls", "Frankenstein", "Biggie Smalls the 2nd" ], nameUnorderedMatch);
 
   // can filter by multiple conditions on the same field
   testPath("/monster?monster_identification_no={gt}200{lt}100439", ["Frankenstein"], nameUnorderedMatch);

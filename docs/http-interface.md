@@ -22,7 +22,7 @@ Multiple argument operators take arguments as comma separated list, the comma ca
 
 The operator `near` can be applied on schemaType `[]` or `[<type>]`. ( ? should be enforced number ? )
 
-geo near, with (optional) radius in miles:
+geo near, with (optional) radius:
 
 ```
 /monsters?latlon={near}38.8977,-77.0366
@@ -124,19 +124,20 @@ These are operators that can be used to alter how the passed in value is handled
 
 ### String
 
-- `string={all}match,batch` - Both match and batch must be present
-- `string={nin}match,batch` - Neither match nor batch
-- `string={in}match,batch` - Either match or batch
-- `string={ne}coffee` - Not coffee
-
-- `string={in}{regex}^A,^B` - Starting either with A or B
-- `string={nin}{regex}^A,^B` - Starting neither with A or B
-- `string={in}{iregex}^A,^B` - Starting with A, B, a or b
-
-- `$text=apple pear` - search on text index ( requires mongodb version >=2.4.6 )
-- `$text=apple pear,it` - search on text index in italian
-- `$text="some apples"` - search on text index whole phrase
-- `$text=pears -apples` - search on text index containing pears but no apples
+- Basic
+    - `string={all}match,batch` - Both match and batch must be present
+    - `string={nin}match,batch` - Neither match nor batch
+    - `string={in}match,batch` - Either match or batch
+    - `string={ne}coffee` - Not coffee
+- Regex
+    - `string={in}{regex}^A,^B` - Starting either with A or B
+    - `string={nin}{regex}^A,^B` - Starting neither with A or B
+    - `string={in}{iregex}^A,^B` - Starting with A, B, a or b
+- Text index searches
+    - `$text=apple pear` - search on text index ( requires mongodb version >=2.4.6 )
+    - `$text=apple pear,it` - search on text index in italian
+    - `$text="some apples"` - search on text index whole phrase
+    - `$text=pears -apples` - search on text index containing pears but no apples
 
 ### Boolean
 
@@ -147,7 +148,7 @@ These are operators that can be used to alter how the passed in value is handled
 - `array={all}match,batch` - Both match and batch must be present
 - `array={nin}match,batch` - Neither match nor batch
 - `array={in}match,batch` - Either match or batch
-- `latlon={near}37,-122,5` - Near 37,-122, with a 5 mile max radius
+- `latlon={near}37,-122,5` - Near 37,-122, with a 5 max radius
 - `latlon={near}37,-122` - Near 37,-122, no radius limit. Automatically sorts by distance
 
 ### Mixed
@@ -164,5 +165,5 @@ Since a Mixed Schematype can contain **anything** you can apply any operator of 
 - `number={ne}123` - Not 123
 - `string={not}coffee` - Not coffee
 - `number={mod}10,2` - Where (number / 10) has remainder 2
-- `latlon={near}37,-122,5` - Near 37,-122, with a 5 mile max radius
+- `latlon={near}37,-122,5` - Near 37,-122, with a 5 max radius
 - `latlon={near}37,-122` - Near 37,-122, no radius limit. Automatically sorts by distance
