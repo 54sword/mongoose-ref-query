@@ -28,6 +28,8 @@ describe('schemeTypes', function(){
 
   testPath('/rainbow?ofString={in}{regex}^a,^b', ['albert', 'noe'], nameUnorderedMatch);
 
+  testPath('/rainbow?ofString={in}', ['jael'], nameUnorderedMatch);
+
   /* missing date schemaType support
   testPath('/rainbow?updated=2013-03-01T01:10:00', ['albert'], nameUnorderedMatch);
   */

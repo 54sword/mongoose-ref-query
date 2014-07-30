@@ -15,6 +15,10 @@ describe('references', function(){
 
   testPath('/company?teams.members.name=marco', ["alpha"], nameUnorderedMatch);
 
+  testPath('/company?teams.members.0.name=francesco', [], nameUnorderedMatch);
+
+  testPath('/company?teams.members.1.name=francesco', ["alpha"], nameUnorderedMatch);
+
   testPath('/employee?manager.name=antonio', ["marco","francesco"], nameUnorderedMatch);
 
   testPath('/employee?manager.manager.name=Achilles', ["Cicero","Polybus"], nameUnorderedMatch);

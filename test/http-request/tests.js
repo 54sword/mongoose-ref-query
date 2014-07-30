@@ -166,8 +166,8 @@ describe('http GET request parsing', function(){
 
         expected = {
             $and: [
-                { a: { $in: [] } },
-                { a: { $nin: [] } },
+                { a: { $in: [/(?:)/] } },
+                { a: { $nin: [""] } },
             ]
         };
 

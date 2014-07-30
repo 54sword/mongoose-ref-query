@@ -46,7 +46,7 @@ module.exports = function(connection) {
             mixed: { mixedProperty: "mixedvalue" },
             ofMixed: [],
             ofNumber: [12, 82],
-            ofString: ['cbc', 'def'],
+            ofString: ['cbc', 'def', ''],
             indexedText: "This text does not contain any apples"
         }
     ];
