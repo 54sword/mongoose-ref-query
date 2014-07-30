@@ -3,7 +3,7 @@
 ## Overview
 
 - Provides a mongoose model method that transforms http request objects into mongo query expressions. e.g. `/monsters?name=joe&age={gt}20`
-- Adds support for query expressions on referenced fields. e.g. `/employee?manager.manager.name=herkule`
+- Adds support for query expressions on referenced fields. e.g. `/employee?manager.manager.name=herkules`
 - It can check that the query matches the schema and if not throw an error ( disabled by default ).
 
 ## Usage
@@ -41,7 +41,7 @@ It will return a mock function returning a promise resolved to empty array other
 
 ```
 // .apiQueryPrepare(expression[, config])
-var trigger = Employee.apiQueryPrepare({ "manager.manager.name" : "herkule" });
+var trigger = Employee.apiQueryPrepare({ "manager.manager.name" : "herkules" });
 var promise = trigger();
 ```
 
@@ -60,11 +60,11 @@ The config parameter is a query config object with the folowing options:
 
 ## Http interface syntax
 
-see [http-interface](http-interface.md)
+see [http-interface](docs/http-interface.md)
 
 ## To run tests
 
-See [dev](dev.md)
+See [dev](docs/dev.md)
 
 ## License
 

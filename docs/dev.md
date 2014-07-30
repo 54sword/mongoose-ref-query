@@ -66,6 +66,21 @@ results in the query
 
 this query would not be possible without using the $in operator ( there would be no property name ).
 
+
+#### Operators to consider
+
+Braching operators : $not, $nor
+
+On mixed and arrays might consider : $exists, $type
+
+$size does not accept ranges or further query expressions.
+
+Geo operators.
+
+$where ???
+
+see [operators](operators.md)
+
 Mongo links
 -----------
 
