@@ -2,7 +2,7 @@
 
 module.exports = function(connection) {
 
-    var models = require('./models')(connection),
+    var models = require("./models")(connection),
         Smurf = models.Smurf;
 
     // DATA
@@ -16,12 +16,12 @@ module.exports = function(connection) {
                     name: "carrot",
                     vegetarian: true,
                     calories: 3,
-                    records: [ { event_name: 'easter', amount: 40 }, { event_name: 'christmass', amount: 90 } ]
+                    records: [ { event_name: "easter", amount: 40 }, { event_name: "christmass", amount: 90 } ]
                 }
             ],
             mixed: {
                 sub: {
-                    subsub: 'subsubvalue'
+                    subsub: "subsubvalue"
                 }
             }
         },
@@ -33,7 +33,7 @@ module.exports = function(connection) {
                     name: "broccoli",
                     vegetarian: true,
                     calories: 9,
-                    records: [ { event_name: 'newYear', amount: 100 }, { event_name: 'thanksgiving', amount: 40 } ]
+                    records: [ { event_name: "newYear", amount: 100 }, { event_name: "thanksgiving", amount: 40 } ]
                 }
             ]
         },
@@ -45,7 +45,7 @@ module.exports = function(connection) {
                     name: "tomato",
                     vegetarian: true,
                     calories: 40,
-                    records: [ { event_name: 'easter', amount: 120 } ]
+                    records: [ { event_name: "easter", amount: 120 } ]
                 }
             ],
             memories: [
@@ -58,7 +58,7 @@ module.exports = function(connection) {
     var createSmurf = function(smurf) {
             return new Smurf(smurf).saveQ();
         },
-        saveSmurfs = createCollection(createSmurf);
+        saveSmurfs = serialize(createSmurf);
 
     return Smurf.removeQ().then(function() {
         return saveSmurfs(smurfs);

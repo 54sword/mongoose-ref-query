@@ -2,8 +2,8 @@
 
 module.exports = function(connection) {
 
-    var mongoose = require('mongoose-q')(),
-        mongooseApiQuery = require('../../lib/mongoose-api-query');
+    var mongoose = require("mongoose-q")(),
+        mongooseApiQuery = require("../../lib/mongoose-api-query");
 
     var monsterSchema = new mongoose.Schema({
       name: String,
@@ -18,9 +18,11 @@ module.exports = function(connection) {
       data: {} // mixed
     });
 
-    monsterSchema.index({'loc':'2d'});
+    monsterSchema.index({"loc":"2d"});
     monsterSchema.plugin(mongooseApiQuery);
 
-    return connection.model('Monster', monsterSchema);
+    return {
+        Monster: connection.model("Monster", monsterSchema)
+    };
 
 };

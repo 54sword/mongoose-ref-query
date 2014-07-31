@@ -2,7 +2,7 @@
 
 var mongooseApiQuery = require("../../lib/mongoose-api-query.js");
 
-describe('http GET request parsing', function(){
+describe("http GET request parsing", function(){
 
     it("parses basic value", function() {
 
@@ -50,7 +50,7 @@ describe('http GET request parsing', function(){
         var input, output, expected;
 
         input = {
-            a : "{in}b,c,d{in}{regex}/^A/,/^B/"
+            a : "{in}b,c,d{in}{regex}^A,^B"
         };
 
         expected = {
@@ -71,7 +71,7 @@ describe('http GET request parsing', function(){
         var input, output, expected;
 
         input = {
-            a : "{in}b,c,d{iregex}/^A/,/^B/"
+            a : "{in}b,c,d{iregex}^A,^B"
         };
 
         expected = {
@@ -112,7 +112,7 @@ describe('http GET request parsing', function(){
         var input, output, expected;
 
         input = {
-            a : "{in}b,c,d{iregex}/^A/,/^B/",
+            a : "{in}b,c,d{iregex}^A,^B",
             page : 3,
             per_page : 2
         };

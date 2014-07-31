@@ -2,8 +2,8 @@
 
 module.exports = function(connection) {
 
-    var mongoose = require('mongoose-q')(),
-        mongooseApiQuery = require('../../lib/mongoose-api-query');
+    var mongoose = require("mongoose-q")(),
+        mongooseApiQuery = require("../../lib/mongoose-api-query");
 
     var Schema = mongoose.Schema;
 
@@ -26,11 +26,11 @@ module.exports = function(connection) {
         indexedText: String
     });
 
-    rainbowSchema.index({'indexedText': 'text'});
+    rainbowSchema.index({"indexedText": "text"});
     rainbowSchema.plugin(mongooseApiQuery);
 
     return {
-        Rainbow: connection.model('Rainbow', rainbowSchema)
+        Rainbow: connection.model("Rainbow", rainbowSchema)
     };
 
 };

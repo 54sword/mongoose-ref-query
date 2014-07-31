@@ -9,15 +9,12 @@ TODO
 - check other forks for usefull features
 - write a test for exact number matching
 - add testing for errors
-- tests for population
 - structured tests for schematypes one tests.js file for each type
-- objectidonly test
 - throw errors on wrong number of arguments supplied to given operator
-- rewrite docs - divide into multiple .md files
 - write client escaping library
 
 - add casting to type operator for mixed schema  ?data.age={number}5
-- add support for all the schematypes & check the existing ones
+- add support for all the schematypes & check the existing ones \
     missing:
     - date
     - buffer

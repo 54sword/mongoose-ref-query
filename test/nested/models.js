@@ -2,8 +2,8 @@
 
 module.exports = function(connection) {
 
-    var mongoose = require('mongoose-q')(),
-        mongooseApiQuery = require('../../lib/mongoose-api-query'),
+    var mongoose = require("mongoose-q")(),
+        mongooseApiQuery = require("../../lib/mongoose-api-query"),
         Types = mongoose.Schema.Types;
 
     var smurfSchema = new mongoose.Schema({
@@ -25,11 +25,11 @@ module.exports = function(connection) {
       mixed: Types.Mixed
     });
 
-    smurfSchema.index({'memories.location':'2d'});
+    smurfSchema.index({"memories.location":"2d"});
     smurfSchema.plugin(mongooseApiQuery);
 
     return {
-        Smurf: connection.model('Smurf', smurfSchema)
+        Smurf: connection.model("Smurf", smurfSchema)
     };
 
 };

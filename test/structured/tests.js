@@ -1,14 +1,11 @@
 "use strict";
 
-var mongoose = require('mongoose-q')(),
-    config = require('../mongo.json');
-
-var connection = mongoose.createConnection(config.host, config.db);
+var connection = genNewConnection();
 
 var models = require("./models.js")(connection),
     Person = models.Person;
 
-describe('function tests', function(){
+describe("function tests", function(){
 
   it("simple apiQueryPrepare test", function() {
     var trigger = Person.apiQueryPrepare( { name: { $in: ["Mark"] } }, {} );

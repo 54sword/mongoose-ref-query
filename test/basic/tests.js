@@ -1,37 +1,12 @@
 "use strict";
 
-describe('basic functionality', function(){
+describe("basic functionality", function(){
 
   // without any query params, loads all monsters
   testPath("/monster", 6, isOfNumber);
 
   // does string searching
-  testPath("/monster?name=Big Purple People Eater", "Big Purple People Eater", containsName);
-
-  // can't use exact matching with other operators ( should return error )
-  testPath("/monster?monster_identification_no={in}1{lt}20", "Big Purple People Eater", containsName);
-
-  // can sort results
-  testPath("/monster?sort_by=monster_identification_no,-1", ["Bessie the Lochness Monster", "Big Purple People Eater"], inOrder);
-
-  // can sort results on nested params
-  testPath("/monster?sort_by=foods.name,1", ["Big Purple People Eater", "Biggie Smalls the 2nd"], inOrder);
-
-  // default sort order is asc
-  testPath("/monster?sort_by=foods.name", ["Big Purple People Eater", "Biggie Smalls the 2nd"], inOrder);
-
-  // "desc" is valid sort order
-  testPath("/monster?sort_by=monster_identification_no,desc", ["Biggie Smalls the 2nd", "Big Purple People Eater"], inOrder);
-
-
-  // works with {near} and no stated radius
-  testPath("/monster?loc={near}38.8977,-77.0366", 6, isOfNumber);
-
-  // returns correct result for {near} within 1 mile radius
-  testPath("/monster?loc={near}38.8977,-77.0366,0.0144927536", ["Big Purple People Eater"], nameUnorderedMatch);
-
-  // returns correct result for {near} within 3 mile radius
-  testPath("/monster?loc={near}38.8977,-77.0366,0.0434782608", [ "Big Purple People Eater", "Biggie Smalls", "Frankenstein", "Biggie Smalls the 2nd" ], nameUnorderedMatch);
+  testPath("/monster?name=Big Purple People Eater", ["Big Purple People Eater"], nameUnorderedMatch);
 
   // can filter by multiple conditions on the same field
   testPath("/monster?monster_identification_no={gt}200{lt}100439", ["Frankenstein"], nameUnorderedMatch);
@@ -41,12 +16,6 @@ describe('basic functionality', function(){
 
   // excludes results that match {ne} param for Strings, case insensitive
   testPath("/monster?name={ne}Biggie Smalls", 5, isOfNumber);
-
-  // handles paging of results
-  testPath("/monster?page=2&per_page=4", 2, isOfNumber);
-
-  // defaults to 10 results per page
-  testPath("/monster?page=1", 6, isOfNumber);
 
   // can handle schemaless property
   testPath("/monster?data.mood=sad", ["Big Purple People Eater"], nameUnorderedMatch);
@@ -60,7 +29,55 @@ describe('basic functionality', function(){
   // can handle schemaless property number
   testPath("/monster?data.hands=14", ["Clay Johnson"], nameUnorderedMatch);
 
-  describe('SchemaString', function(){
+});
+
+describe("geospatial operators", function() {
+
+  // works with {near} and no stated radius
+  testPath("/monster?loc={near}38.8977,-77.0366", 6, isOfNumber);
+
+  // returns correct result for {near} within 1 mile radius
+  testPath("/monster?loc={near}38.8977,-77.0366,0.0144927536", ["Big Purple People Eater"], nameUnorderedMatch);
+
+  // returns correct result for {near} within 3 mile radius
+  testPath("/monster?loc={near}38.8977,-77.0366,0.0434782608", [ "Big Purple People Eater", "Biggie Smalls", "Frankenstein", "Biggie Smalls the 2nd" ], nameUnorderedMatch);
+
+});
+
+describe("request config", function() {
+
+    describe("sorting", function() {
+
+      // can sort results
+      testPath("/monster?sort_by=monster_identification_no,-1", ["Bessie the Lochness Monster", "Big Purple People Eater"], inOrder);
+
+      // can sort results on nested params
+      testPath("/monster?sort_by=foods.name,1", ["Big Purple People Eater", "Biggie Smalls the 2nd"], inOrder);
+
+      // default sort order is asc
+      testPath("/monster?sort_by=foods.name", ["Big Purple People Eater", "Biggie Smalls the 2nd"], inOrder);
+
+      // "desc" is valid sort order
+      testPath("/monster?sort_by=monster_identification_no,desc", ["Biggie Smalls the 2nd", "Big Purple People Eater"], inOrder);
+
+    });
+
+
+    describe("paging", function() {
+
+      // handles paging of results
+      testPath("/monster?page=2&per_page=4", 2, isOfNumber);
+
+      // defaults to 10 results per page
+      testPath("/monster?page=1", 6, isOfNumber);
+
+    });
+
+});
+
+describe("schemaTypes", function() {
+
+  describe("SchemaString", function(){
 
       testPath("/monster?name=big%20purple", 0, isOfNumber);
 
@@ -72,16 +89,15 @@ describe('basic functionality', function(){
 
   });
 
-  describe('SchemaNumber', function(){
+  describe("SchemaNumber", function(){
 
       // returns correct result for a basic search
       testPath("/monster?monster_identification_no=301", ["Frankenstein"], nameUnorderedMatch);
 
-      // does not do partial matching by default
+      // returns correct result for a basic search
       testPath("/monster?monster_identification_no=30", 0, isOfNumber);
 
       // returns correct results for {mod}
-
       testPath("/monster?monster_identification_no={mod}150,1", [ "Big Purple People Eater", "Frankenstein" ], nameUnorderedMatch);
 
       // returns correct results for {gt}
@@ -110,7 +126,7 @@ describe('basic functionality', function(){
 
   });
 
-  describe('SchemaBoolean', function(){
+  describe("SchemaBoolean", function(){
 
       // parses "true" as true
       testPath("/monster?eats_humans=true", ["Big Purple People Eater", "Bessie the Lochness Monster", "Clay Johnson"], nameUnorderedMatch);
@@ -135,37 +151,36 @@ describe('basic functionality', function(){
 
   });
 
-  describe('SubSchema', function(){
-
-      describe('SchemaString', function(){
-
-          // does a basic filter
-          testPath("/monster?foods.name=Kale", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
-
-          // Defaults to {in}
-          testPath("/monster?foods.name=Kale,Beets", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
-
-          // calculates {in} correctly
-          testPath("/monster?foods.name={in}{regex}^K,^W", ["Big Purple People Eater", "Frankenstein",  "Biggie Smalls"], nameUnorderedMatch);
-
-      });
-
-
-      describe('SchemaNumber', function(){
-
-          // does a basic filter
-          testPath("/monster?foods.calories={gt}350", ["Biggie Smalls the 2nd"], nameUnorderedMatch);
-
-      });
-
-      describe('SchemaBoolean', function(){
-
-          // does a basic filter
-          testPath("/monster?foods.vegetarian=t", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
-
-      });
-
- });
-
 });
 
+describe("SubSchema", function(){
+
+  describe("SchemaString", function(){
+
+      // does a basic filter
+      testPath("/monster?foods.name=Kale", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
+
+      // Defaults to {in}
+      testPath("/monster?foods.name=Kale,Beets", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
+
+      // calculates {in} correctly
+      testPath("/monster?foods.name={in}{regex}^K,^W", ["Big Purple People Eater", "Frankenstein",  "Biggie Smalls"], nameUnorderedMatch);
+
+  });
+
+
+  describe("SchemaNumber", function(){
+
+      // does a basic filter
+      testPath("/monster?foods.calories={gt}350", ["Biggie Smalls the 2nd"], nameUnorderedMatch);
+
+  });
+
+  describe("SchemaBoolean", function(){
+
+      // does a basic filter
+      testPath("/monster?foods.vegetarian=t", ["Big Purple People Eater", "Frankenstein", "Biggie Smalls"], nameUnorderedMatch);
+
+  });
+
+});

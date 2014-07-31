@@ -2,8 +2,8 @@
 
 module.exports = function(connection) {
 
-    var mongoose = require('mongoose-q')(),
-        mongooseApiQuery = require('../../lib/mongoose-api-query'),
+    var mongoose = require("mongoose-q")(),
+        mongooseApiQuery = require("../../lib/mongoose-api-query"),
         Schema = mongoose.Schema;
 
     var ObjectId = Schema.Types.ObjectId;
@@ -11,17 +11,17 @@ module.exports = function(connection) {
     var schemas = {
         Company : new Schema({
                           name: String,
-                          teams: [{ type: ObjectId, ref: 'Team'}],
+                          teams: [{ type: ObjectId, ref: "Team"}],
                           revenue: Number
                         }),
         Team : new Schema({
                        name: String,
-                       members: [{ type: ObjectId, ref: 'Employee'}]
+                       members: [{ type: ObjectId, ref: "Employee"}]
                      }),
         Employee : new Schema({
                            name: String,
                            surname: String,
-                           manager: { type: ObjectId, ref: 'Employee' },
+                           manager: { type: ObjectId, ref: "Employee" },
                            age: Number
                          })
     };

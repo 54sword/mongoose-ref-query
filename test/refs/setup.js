@@ -2,10 +2,10 @@
 
 module.exports = function(connection) {
 
-    var Q = require('q');
+    var Q = require("q");
     //Q.longStackSupport = true;
 
-    var models = require('./models')(connection),
+    var models = require("./models")(connection),
         Company = models.Company,
         Team = models.Team,
         Employee = models.Employee;
@@ -89,9 +89,9 @@ module.exports = function(connection) {
     };
 
     // PROMISE CHAINING
-    var saveCompanies = createCollection(createCompany),
-        saveTeams = createCollection(createTeam),
-        saveEmployees = createCollection(createEmployee);
+    var saveCompanies = serialize(createCompany),
+        saveTeams = serialize(createTeam),
+        saveEmployees = serialize(createEmployee);
 
     // CLEANUP
     return Q.all([

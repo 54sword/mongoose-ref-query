@@ -2,7 +2,7 @@
 
 module.exports = function(connection) {
 
-    var models = require('./models')(connection),
+    var models = require("./models")(connection),
         Rainbow = models.Rainbow;
 
     // DATA
@@ -23,7 +23,7 @@ module.exports = function(connection) {
             ],
             age: 18,
             ofNumber: [12, 82, 11],
-            ofString: ['abc', 'def'],
+            ofString: ["abc", "def"],
             indexedText: "This text contains some rocks."
         },
         {
@@ -37,7 +37,7 @@ module.exports = function(connection) {
                 }
             ],
             ofNumber: [33, 22, 82],
-            ofString: ['bbc', 'def', null],
+            ofString: ["bbc", "def", null],
             indexedText: "This text contains some apples."
         },
         {
@@ -46,7 +46,7 @@ module.exports = function(connection) {
             mixed: { mixedProperty: "mixedvalue" },
             ofMixed: [],
             ofNumber: [12, 82],
-            ofString: ['cbc', 'def', ''],
+            ofString: ["cbc", "def", ""],
             indexedText: "This text does not contain any apples"
         }
     ];
@@ -55,7 +55,7 @@ module.exports = function(connection) {
     var create= function(el) {
             return new Rainbow(el).saveQ();
         },
-        saveElements = createCollection(create);
+        saveElements = serialize(create);
 
     // CLEANUP
     return Rainbow.removeQ().then(function init() {

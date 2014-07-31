@@ -2,8 +2,8 @@
 
 module.exports = function(connection) {
 
-    var mongoose = require('mongoose-q')(),
-        mongooseApiQuery = require('../../lib/mongoose-api-query');
+    var mongoose = require("mongoose-q")(),
+        mongooseApiQuery = require("../../lib/mongoose-api-query");
 
     var Schema = mongoose.Schema;
 
@@ -20,7 +20,7 @@ module.exports = function(connection) {
     personSchema.plugin(mongooseApiQuery);
 
     return {
-        Person: connection.model('Person', personSchema)
+        Person: connection.model("Person", personSchema)
     };
 
 };

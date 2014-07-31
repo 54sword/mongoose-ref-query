@@ -1,20 +1,23 @@
 "use strict";
 
-var expect = require("expect.js"),
-    request = require("request"),
-    Q = require("q");
+var request = require("request"),
+    Q = require("q"),
+    mongoose = require("mongoose-q")();
 
-global.expect = expect;
+global.expect = require("expect.js");
 
+/**
+ * Unique id generator
+ */
 var unique = 0;
 global.getUnique = function () {
     return unique++;
 };
 
-/*
- * checks whether two objects/arrays have the same structure,
+/**
+ * Checks whether two objects/arrays have the same structure,
  * doesn't compare regexes ( only that are both of the type RegExp )
- * always pass expected for a and got for b
+ * always pass expected for a and got for b.
  */
 global.objectsSame = function objectsSame(a, b) {
     /* exported objectsSame */
@@ -28,8 +31,6 @@ global.objectsSame = function objectsSame(a, b) {
                  "\ngot object \n" + JSON.stringify(b);
     }
 
-    // check they have the same keys
-    //expect( akeys.length ).to.be.equal( bkeys.length );
     if ( akeys.length !== bkeys.length )
         throw new Error (differentKeysMessage());
     for ( var j = 0, jj = akeys.length; j < jj ; j++ ) {
@@ -48,8 +49,11 @@ global.objectsSame = function objectsSame(a, b) {
             throw new Error ( "Expected property " + akeys[i] +
                               " to contain value of type " + typeaa +
                               " got type " + typebb + " instead!" );
-        if ( typeof aa ===  "object" && aa !== null ) {
+        if ( typeaa ===  "object" || typeaa === "array" ) {
             objectsSame( aa, bb );
+        }
+        else if ( typeaa === "regexp" ) {
+            expect( aa.toString() ).to.be.equal( bb.toString() );
         }
         else {
             expect( aa ).to.be.equal( bb );
@@ -58,7 +62,7 @@ global.objectsSame = function objectsSame(a, b) {
 };
 
 function getType(obj) {
-    return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+    return {}.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
 }
 
 /*
@@ -67,11 +71,10 @@ function getType(obj) {
  * result is correct.
  */
 global.testPath = function(path, expected, matcher) {
-    /* exported testPath */
 
     it(path, function(done) {
 
-        request({ url: 'http://localhost:3000' + path, json: true }, function (error, response, content) {
+        request({ url: "http://localhost:3000" + path, json: true }, function (error, response, content) {
           matcher( expected, content, done, response );
         });
 
@@ -146,8 +149,11 @@ global.testExpression = function(description, model, expression, expected) {
  * constructor(collection[0]).then( constructor(collection[1]) ).then( constructor[2] )...
  *
  * the last (returned) promise is resolved to an array of saved alement's ids
+ *
+ * Could have been written without the slice by passing an empty promise as the first
+ * element to reduce, but it would result in a wasted node tick.
  */
-global.createCollection = function createCollection(constructor) {
+global.serialize = function serialize(constructor) {
     return function(collection) {
         if ( ! collection.length ) return Q(null);
         var saved_ids = [];
@@ -162,4 +168,13 @@ global.createCollection = function createCollection(constructor) {
             return saved_ids;
         });
     };
+};
+
+/**
+ * Creates new mongoose connection.
+ * Should be called only by the top level script.
+ */
+global.genNewConnection = function genNewConnection(config) {
+    config = config || require("./mongo.json");
+    return mongoose.createConnection(config.host, config.db);
 };

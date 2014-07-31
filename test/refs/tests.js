@@ -1,35 +1,32 @@
 "use strict";
 
-var mongoose = require('mongoose-q')(),
-    config = require('../mongo.json');
-
-var connection = mongoose.createConnection(config.host, config.db);
+var connection = genNewConnection();
 
 var models = require("./models.js")(connection),
     Company = models.Company,
     Team = models.Team;
 
-describe('references', function(){
+describe("references", function(){
 
-  testPath('/team?members.name=marco', ["alpha_marketing"], nameUnorderedMatch);
+  testPath("/team?members.name=marco", ["alpha_marketing"], nameUnorderedMatch);
 
-  testPath('/company?teams.members.name=marco', ["alpha"], nameUnorderedMatch);
+  testPath("/company?teams.members.name=marco", ["alpha"], nameUnorderedMatch);
 
-  testPath('/company?teams.members.0.name=francesco', [], nameUnorderedMatch);
+  testPath("/company?teams.members.0.name=francesco", [], nameUnorderedMatch);
 
-  testPath('/company?teams.members.1.name=francesco', ["alpha"], nameUnorderedMatch);
+  testPath("/company?teams.members.1.name=francesco", ["alpha"], nameUnorderedMatch);
 
-  testPath('/employee?manager.name=antonio', ["marco","francesco"], nameUnorderedMatch);
+  testPath("/employee?manager.name=antonio", ["marco","francesco"], nameUnorderedMatch);
 
-  testPath('/employee?manager.manager.name=Achilles', ["Cicero","Polybus"], nameUnorderedMatch);
+  testPath("/employee?manager.manager.name=Achilles", ["Cicero","Polybus"], nameUnorderedMatch);
 
-  testPath('/team?members.age=22', ["beta_programmers", "gamma_programmers"], nameUnorderedMatch);
+  testPath("/team?members.age=22", ["beta_programmers", "gamma_programmers"], nameUnorderedMatch);
 
 });
 
-describe('population', function() {
+describe("population", function() {
 
-  testPath('/employee?manager.name=antonio', null, function(expected, got, done) {
+  testPath("/employee?manager.name=antonio", null, function(expected, got, done) {
 
     got.forEach(function(employee) {
         expect(employee.manager).to.not.have.property("name");
@@ -38,7 +35,7 @@ describe('population', function() {
 
   });
 
-  testPath('/employee?manager.name=antonio&populate=manager', null, function(expected, got, done) {
+  testPath("/employee?manager.name=antonio&populate=manager", null, function(expected, got, done) {
 
     got.forEach(function(employee) {
         expect(employee.manager).to.have.property("name", "antonio");
@@ -49,7 +46,7 @@ describe('population', function() {
 
 });
 
-describe('complex references', function() {
+describe("complex references", function() {
 
     /* must contain at least one employee with name starting with C
      * and at least one of age 22, may but doesn't have to be the

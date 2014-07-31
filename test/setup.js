@@ -1,49 +1,25 @@
 "use strict";
 
-var glob = require('glob'),
-    mongoose = require('mongoose-q')(),
-    Q = require('q');
-
 // global testing functions
 require("./testing.js");
 
-var config = require('./mongo.json'),
-    connection = mongoose.createConnection(config.host, config.db);
+var glob = require("glob"),
+    connection = genNewConnection();
 
-var setup_scripts = glob.sync('./*/setup.js', { cwd: __dirname });
+var runScriptsSerially = serialize(function(script) {
+    var formatted = script.toUpperCase().replace(/.*\/([^\/]*)\/[^\/]*$/, "$1");
+    console.log( formatted + " STARTING");
+    return require(script)(connection)
+           .then(function(r) {
+               console.log( formatted + " DONE !\n");
+               return r;
+           });
+});
 
-serialize( setup_scripts )
+var setup_scripts = glob.sync("./*/setup.js", { cwd: __dirname });
+
+runScriptsSerially( setup_scripts )
 .then(function() {
-
     console.log("ALL SETUP SCRIPTS DONE!!!");
     connection.close();
-
 }).done();
-
-function serialize(scripts) {
-
-    if ( ! scripts.length ) return Q(null);
-
-    console.log( formatName(scripts[0]) + " STARTING");
-
-    return scripts.slice(1).reduce(function(q, script, i) {
-
-        return q.then(function() {
-
-            console.log( formatName(scripts[i]) + " DONE !\n");
-
-            console.log( formatName(scripts[i+1]) + " STARTING");
-            return require(script)(connection);
-
-        });
-
-    }, require(scripts[0])(connection))
-    .then(function() {
-        console.log( formatName(scripts[scripts.length-1]) + " DONE !\n");
-    });
-
-}
-
-function formatName(path) {
-    return path.toUpperCase().slice(2).replace(/\/.*/, '');
-}

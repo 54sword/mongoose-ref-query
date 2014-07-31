@@ -2,18 +2,15 @@
 
 module.exports = function(connection) {
 
-    var Q = require('q');
-
-    var Monster = require('./model')(connection),
-        monsters = require('./fixtures');
+    var models = require("./models")(connection),
+        Monster = models.Monster,
+        monsters = require("./fixtures");
 
     return Monster.removeQ()
     .then(function() {
-        return monsters.reduce(function(promise, next_monster) {
-            return promise.then(function() {
-                return new Monster(next_monster).saveQ();
-            });
-        }, Q(true));
+        return serialize(function(monster) {
+            return new Monster(monster).saveQ();
+        })(monsters);
     });
 
 };

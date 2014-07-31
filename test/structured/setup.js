@@ -2,7 +2,7 @@
 
 module.exports = function(connection) {
 
-    var models = require('./models')(connection),
+    var models = require("./models")(connection),
         Person = models.Person;
 
     // DATA
@@ -45,7 +45,7 @@ module.exports = function(connection) {
     var create= function(el) {
             return new Person(el).saveQ();
         },
-        saveElements = createCollection(create);
+        saveElements = serialize(create);
 
     // CLEANUP
     return Person.removeQ().then(function init() {

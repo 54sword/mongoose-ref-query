@@ -1,10 +1,9 @@
 "use strict";
 
 var mongooseApiQuery = require("../../lib/mongoose-api-query.js"),
-    mongoose = require('mongoose-q')(),
-    mongooseApiQuery = require('../../lib/mongoose-api-query.js');
+    mongoose = require("mongoose-q")();
 
-describe('http GET request parsing', function(){
+describe("http GET request parsing", function(){
 
     it("throws error on invalid operator", function() {
 
@@ -102,4 +101,5 @@ describe('http GET request parsing', function(){
         }).to.throwException(/The given schema has no path "name"!/);
 
     });
+
 });
