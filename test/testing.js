@@ -20,49 +20,59 @@ global.getUnique = function () {
  * always pass expected for a and got for b.
  */
 global.objectsSame = function objectsSame(a, b) {
-    /* exported objectsSame */
-    var akeys = Object.keys(a).sort(),
-        bkeys = Object.keys(b).sort();
 
     function differentKeysMessage() {
-         return "Expected object with keys " + JSON.stringify(bkeys) +
-                 " to have the keys " + JSON.stringify(akeys) +
+         return "Expected object with keys " + Object.keys(a).sort().join(", ") +
+                 " to have the keys " + Object.keys(b).sort().join(", ") +
                  "\nexpected object \n" + JSON.stringify(a) +
                  "\ngot object \n" + JSON.stringify(b);
     }
 
-    if ( akeys.length !== bkeys.length )
+    if ( ! haveSameKeys( a, b ) )
         throw new Error (differentKeysMessage());
-    for ( var j = 0, jj = akeys.length; j < jj ; j++ ) {
-        if ( akeys[j] !== bkeys[j] )
-            throw new Error (differentKeysMessage());
-    }
 
     // check they have the same values on the corresponding keys
-    for ( var i = 0, ii = akeys.length; i < ii ; i++ ) {
-        var aa = a[ akeys[i] ],
-            bb = b[ akeys[i] ];
+    for ( var i in  a ) {
+        var val_a = a[i],
+            val_b = b[i];
 
-        var typeaa = getType( aa ),
-            typebb = getType( bb );
-        if ( typeaa !== typebb )
-            throw new Error ( "Expected property " + akeys[i] +
-                              " to contain value of type " + typeaa +
-                              " got type " + typebb + " instead!" );
-        if ( typeaa ===  "object" || typeaa === "array" ) {
-            objectsSame( aa, bb );
-        }
-        else if ( typeaa === "regexp" ) {
-            expect( aa.toString() ).to.be.equal( bb.toString() );
-        }
-        else {
-            expect( aa ).to.be.equal( bb );
+        var typea = getType( val_a ),
+            typeb = getType( val_b );
+
+        if ( typea !== typeb )
+            throw new Error ( "Expected property " + i +
+                              " to contain value of type " + typea +
+                              " got type " + typeb + " instead!" );
+        switch (typea) {
+            case "object":
+            case "array":
+                objectsSame( val_a, val_b );
+                break;
+            case "regexp":
+                expect( val_a.toString() ).to.be.equal( val_b.toString() );
+                break;
+            default:
+                expect( val_a ).to.be.equal( val_b );
         }
     }
 };
 
 function getType(obj) {
     return {}.toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+}
+
+function haveSameKeys(a, b) {
+    var akeys = Object.keys(a).sort(),
+        bkeys = Object.keys(b).sort();
+
+    if ( akeys.length !== bkeys.length )
+        return false;
+
+    for ( var j = 0, jj = akeys.length; j < jj ; j++ )
+        if ( akeys[j] !== bkeys[j] )
+            return false;
+
+    return true;
 }
 
 /*
