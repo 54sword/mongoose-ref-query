@@ -1,10 +1,11 @@
 {
-  "name": "mongoose-api-query",
+  "name": "mongoose-ref-query",
   "version": "0.1.0",
-  "author": "Adam Jacob Becker <ad@mbecker.cc>",
-  "description": "Given a Mongoose model and an array of URI params, construct a query for use in a search API.",
+  "author": "Filippo Ghibellini <http://github.com/fghibellini>",
+  "description": "http queries & queries on reference properties",
   "keywords": [
     "API",
+    "ref",
     "mongoose",
     "search",
     "parameters"
@@ -16,13 +17,13 @@
     "expect.js": "*",
     "express": "3.3.x",
     "glob": "^4.0.3",
+    "mongoose": "3.6.x",
     "mocha": "*",
     "request": "^2.37.0",
     "mongoose-q": "0.0.10"
   },
   "dependencies": {
-    "mongoose": "3.6.x",
     "q": "^1.0.1"
   },
-  "homepage": "http://github.com/adamjacobbecker/mongoose-api-query"
+  "homepage": "http://github.com/fghibellini/mongoose-api-query"
 }

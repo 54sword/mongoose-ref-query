@@ -7,8 +7,8 @@ var models = require("./models.js")(connection),
 
 describe("function tests", function(){
 
-  it("simple apiQueryPrepare test", function() {
-    var trigger = Person.apiQueryPrepare( { name: { $in: ["Mark"] } }, {} );
+  it("simple refQueryPrepare test", function() {
+    var trigger = Person.refQueryPrepare( { name: { $in: ["Mark"] } }, {} );
     return trigger();
   });
 

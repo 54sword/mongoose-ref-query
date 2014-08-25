@@ -28,7 +28,7 @@ describe("http GET request parsing", function(){
         model = mongoose.model("car"+getUnique(), schema);
 
         expect(function() {
-            model.apiQuery({ name : "ferrari" });
+            model.refQuery({ name : "ferrari" });
         }).to.not.throwException();
 
     });
@@ -42,7 +42,7 @@ describe("http GET request parsing", function(){
         model = mongoose.model("car"+getUnique(), schema);
 
         expect(function() {
-            query = model.apiQuery({ age : "100" });
+            query = model.refQuery({ age : "100" });
         }).to.not.throwException();
 
     });
@@ -57,7 +57,7 @@ describe("http GET request parsing", function(){
 
         expect(function() {
             // the error is thrown already during the parsing phase
-            query = model.apiQuery({ age : "100" });
+            query = model.refQuery({ age : "100" });
         }).to.throwException(/The given schema has no path "age"!/);
 
     });
@@ -77,7 +77,7 @@ describe("http GET request parsing", function(){
         var model1 = mongoose.model("referencing"+getUnique(), schema1);
 
         expect(function() {
-            query = model1.apiQuery({ "relationship.age" : "100" });
+            query = model1.refQuery({ "relationship.age" : "100" });
         }).to.not.throwException();
 
     });
@@ -97,7 +97,7 @@ describe("http GET request parsing", function(){
         var model1 = mongoose.model("referencing"+getUnique(), schema1);
 
         expect(function() {
-            query = model1.apiQuery({ "relationship.name" : "100" });
+            query = model1.refQuery({ "relationship.name" : "100" });
         }).to.throwException(/The given schema has no path "name"!/);
 
     });

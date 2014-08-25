@@ -41,7 +41,7 @@ function routesFromModels(app, models) {
 
        app.get("/"+name.toLowerCase(), function handler(req, res) {
 
-           model.apiQuery(req.query)()
+           model.refQuery(req.query)()
            .then(function(results) {
              res.setHeader("X-Count", results.count);
              res.send(results.data);

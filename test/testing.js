@@ -154,7 +154,7 @@ global.inOrder = function (expected, got, done) {
 global.testExpression = function(description, model, expression, expected) {
     it(description, function() {
 
-        var trigger = model.apiQueryPrepare( expression );
+        var trigger = model.refQueryPrepare( expression );
 
         return trigger().then(function(resp) {
             expect(resp.count).to.be(expected.length);
