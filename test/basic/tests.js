@@ -66,7 +66,7 @@ describe("request config", function() {
     describe("paging", function() {
 
       // handles paging of results
-      testPath("/monster?page=2&per_page=4", 2, isOfNumber);
+      testPath("/monster?page=2&per_page=4", 2, isOfNumberNoHeader);
 
       // defaults to 10 results per page
       testPath("/monster?page=1", 6, isOfNumber);

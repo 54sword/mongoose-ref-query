@@ -96,19 +96,26 @@ global.testPath = function(path, expected, matcher) {
  * Compares the result names as a set
  * ( doesn't compare the order )
  */
-global.nameUnorderedMatch = function (expected, got, done) {
+global.nameUnorderedMatch = function (expected, got, done, response) {
+    // check header
+    var headerCount = parseInt(response.headers["x-count"]);
+    expect(headerCount).to.equal(expected.length);
+
+    // check data
     expect(got.length).to.equal(expected.length);
     var names = got.map(function(e) { return e.name; });
     for ( var i = 0, ii = expected.length; i < ii ; i++ )
         expect(names).to.contain(expected[i]);
+
     done();
 };
 
 /*
  * Compares the result names as an ordered list
  */
-global.nameOrderedMatch = function (expected, got, done) {
+global.nameOrderedMatch = function (expected, got, done, response) {
     expect(got.length).to.equal(expected.length);
+    expect(parseInt(response.headers["x-count"])).to.equal(expected.length);
     for ( var i = 0, ii = expected.length; i < ii ; i++ )
         expect(got[i].name).to.equal(expected[i]);
     done();
@@ -123,7 +130,14 @@ function getIndexOf(pool, searched) {
     return pool.map(function(e) { return e.name; }).indexOf(searched);
 }
 
-global.isOfNumber = function (expected, got, done) {
+global.isOfNumber = function (expected, got, done, response) {
+  expect(got.length).to.equal(expected);
+  expect(parseInt(response.headers["x-count"])).to.equal(expected);
+  done();
+};
+
+/* compare only the number of results not the http X-Count header */
+global.isOfNumberNoHeader = function (expected, got, done) {
   expect(got.length).to.equal(expected);
   done();
 };
@@ -143,6 +157,8 @@ global.testExpression = function(description, model, expression, expected) {
         var trigger = model.apiQueryPrepare( expression );
 
         return trigger().then(function(resp) {
+            expect(resp.count).to.be(expected.length);
+            resp = resp.data;
             expect(resp.length).to.be(expected.length);
             for ( var i = 0, ii = resp.length; i < ii; i++ )
                 expect(expected.indexOf(resp[i].name)).to.not.be(-1);

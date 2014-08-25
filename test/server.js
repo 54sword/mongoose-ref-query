@@ -43,7 +43,8 @@ function routesFromModels(app, models) {
 
            model.apiQuery(req.query)()
            .then(function(results) {
-             res.send(results);
+             res.setHeader("X-Count", results.count);
+             res.send(results.data);
            }).done();
 
        });
