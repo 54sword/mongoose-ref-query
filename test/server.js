@@ -41,7 +41,8 @@ function routesFromModels(app, models) {
 
        app.get("/"+name.toLowerCase(), function handler(req, res) {
 
-           model.apiQuery(req.query).exec().then(function(results) {
+           model.apiQuery(req.query)()
+           .then(function(results) {
              res.send(results);
            }).done();
 

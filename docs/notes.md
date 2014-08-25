@@ -7,7 +7,7 @@ Operators can be divided into two groups:
 - require path - { fieldname : { $gt : 15 } }
     - comparison, element - ( $gt, $in, ... )
     - array ( $elemMatch, $size, $all )
-    - evalutation - ( $regex, $mod, ... ) 
+    - evalutation - ( $regex, $mod, ... )
     - geospatial ( $near )
 - don't require a path - { $or : [] }
     - logical - ( $or, $and, ... ) ( the path will be included in the included expression )
@@ -32,7 +32,7 @@ this is more generic since it is valid every time even when specifing criterias 
 Following the above system, we get an expression tree where each object has one and only one attribute.
 
 
-## Transformations 
+## Transformations
 
 #### $and
 
