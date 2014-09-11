@@ -33,12 +33,12 @@ describe("http GET request parsing", function(){
 
     });
 
-    it("by default doesn't throw errors", function() {
+    it("can be set to ignore errors", function() {
 
         var model, schema, query;
 
         schema = new mongoose.Schema({ name: String });
-        schema.plugin( mongooseApiQuery );
+        schema.plugin( mongooseApiQuery, { throwErrors: false });
         model = mongoose.model("car"+getUnique(), schema);
 
         expect(function() {
@@ -47,12 +47,12 @@ describe("http GET request parsing", function(){
 
     });
 
-    it("can be set to throw errors", function() {
+    it("by default throws errors", function() {
 
         var model, schema, query;
 
         schema = new mongoose.Schema({ name: String });
-        schema.plugin( mongooseApiQuery, { throwErrors: true } );
+        schema.plugin( mongooseApiQuery );
         model = mongoose.model("car"+getUnique(), schema);
 
         expect(function() {

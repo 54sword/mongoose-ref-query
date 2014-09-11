@@ -33,8 +33,11 @@ TODO
 ## Testing
 
 ```shell
-node test/setup.js
-node test/server.js &
+cd test
+node setup.js
+node server.js &
+
+cd ..
 npm test
 ```
 
