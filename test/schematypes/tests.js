@@ -35,9 +35,9 @@ describe("schemeTypes", function(){
 
   testPath("/rainbow?name={nin}{regex}^n,^j", ["albert"], nameUnorderedMatch);
 
-  /* missing date schemaType support
   testPath("/rainbow?updated=2013-03-01T01:10:00", ["albert"], nameUnorderedMatch);
-  */
+
+  testPath("/rainbow?updated={gt}2013-03-01T01:10:00", ["noe"], nameUnorderedMatch);
 
   /* should fail because buffer is not supported as schematype
   testPath("/rainbow?binary=cus", ["albert"]);

@@ -85,6 +85,10 @@ global.testPath = function(path, expected, matcher) {
     it(path, function(done) {
 
         request({ url: "http://localhost:3000" + path, json: true }, function (error, response, content) {
+          if (error) throw error;
+          if (response.statusCode!==200)
+              throw new Error("Non-200 statusCode: " + response.statusCode +
+                              " with message:\t" + content.error.message);
           matcher( expected, content, done, response );
         });
 
@@ -99,6 +103,7 @@ global.testPath = function(path, expected, matcher) {
 global.nameUnorderedMatch = function (expected, got, done, response) {
     // check header
     var headerCount = parseInt(response.headers["x-count"]);
+    if (headerCount!==headerCount) throw new Error("Invalid x-count header!");
     expect(headerCount).to.equal(expected.length);
 
     // check data

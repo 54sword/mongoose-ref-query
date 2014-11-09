@@ -11,7 +11,7 @@ module.exports = function(connection) {
         name:    String,
         binary:  Buffer,
         living:  Boolean,
-        updated: { type: Date, default: Date.now },
+        updated: { type: Date },
         age:     { type: Number, min: 18, max: 65 },
         mixed:   Schema.Types.Mixed,
         _someId: Schema.Types.ObjectId,
