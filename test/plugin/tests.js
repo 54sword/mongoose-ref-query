@@ -1,6 +1,6 @@
 "use strict";
 
-var mongooseApiQuery = require("../../lib/mongoose-api-query.js"),
+var mongooseRefQuery = require("../../lib/mongoose-ref-query.js"),
     mongoose = require("mongoose-q")();
 
 describe("http GET request parsing", function(){
@@ -14,7 +14,7 @@ describe("http GET request parsing", function(){
         };
 
         expect(function() {
-            mongooseApiQuery.__parseQuery( input );
+            mongooseRefQuery.__parseQuery( input );
         }).to.throwException(/^Invalid secondary operator/);
 
     });
@@ -24,7 +24,7 @@ describe("http GET request parsing", function(){
         var model, schema;
 
         schema = new mongoose.Schema({ name: String });
-        schema.plugin( mongooseApiQuery );
+        schema.plugin( mongooseRefQuery );
         model = mongoose.model("car"+getUnique(), schema);
 
         expect(function() {
@@ -38,7 +38,7 @@ describe("http GET request parsing", function(){
         var model, schema, query;
 
         schema = new mongoose.Schema({ name: String });
-        schema.plugin( mongooseApiQuery, { throwErrors: false });
+        schema.plugin( mongooseRefQuery, { throwErrors: false });
         model = mongoose.model("car"+getUnique(), schema);
 
         expect(function() {
@@ -52,7 +52,7 @@ describe("http GET request parsing", function(){
         var model, schema, query;
 
         schema = new mongoose.Schema({ name: String });
-        schema.plugin( mongooseApiQuery );
+        schema.plugin( mongooseRefQuery );
         model = mongoose.model("car"+getUnique(), schema);
 
         expect(function() {
@@ -70,8 +70,8 @@ describe("http GET request parsing", function(){
         var schema1 = new mongoose.Schema({ name: String, relationship: { ref: refdModelName, type: mongoose.Schema.Types.ObjectId }}),
             schema2 = new mongoose.Schema({ age: Number });
 
-        schema1.plugin( mongooseApiQuery, { throwErrors: true } );
-        schema2.plugin( mongooseApiQuery, { throwErrors: true } );
+        schema1.plugin( mongooseRefQuery, { throwErrors: true } );
+        schema2.plugin( mongooseRefQuery, { throwErrors: true } );
 
         mongoose.model(refdModelName, schema2);
         var model1 = mongoose.model("referencing"+getUnique(), schema1);
@@ -90,8 +90,8 @@ describe("http GET request parsing", function(){
         var schema1 = new mongoose.Schema({ name: String, relationship: { ref: refdModelName, type: mongoose.Schema.Types.ObjectId }}),
             schema2 = new mongoose.Schema({ age: Number });
 
-        schema1.plugin( mongooseApiQuery, { throwErrors: true } );
-        schema2.plugin( mongooseApiQuery, { throwErrors: true } );
+        schema1.plugin( mongooseRefQuery, { throwErrors: true } );
+        schema2.plugin( mongooseRefQuery, { throwErrors: true } );
 
         mongoose.model(refdModelName, schema2);
         var model1 = mongoose.model("referencing"+getUnique(), schema1);

@@ -1,4 +1,4 @@
 {
     "host" : "localhost",
-    "db" : "mongoose-api-query"
+    "db" : "mongoose-ref-query"
 }

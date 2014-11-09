@@ -3,7 +3,7 @@
 module.exports = function(connection) {
 
     var mongoose = require("mongoose-q")(),
-        mongooseApiQuery = require("../../lib/mongoose-api-query");
+        mongooseRefQuery = require("../../lib/mongoose-ref-query");
 
     var monsterSchema = new mongoose.Schema({
       name: String,
@@ -19,7 +19,7 @@ module.exports = function(connection) {
     });
 
     monsterSchema.index({"loc":"2d"});
-    monsterSchema.plugin(mongooseApiQuery);
+    monsterSchema.plugin(mongooseRefQuery);
 
     return {
         Monster: connection.model("Monster", monsterSchema)

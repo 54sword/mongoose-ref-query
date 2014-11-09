@@ -3,7 +3,7 @@
 module.exports = function(connection) {
 
     var mongoose = require("mongoose-q")(),
-        mongooseApiQuery = require("../../lib/mongoose-api-query"),
+        mongooseRefQuery = require("../../lib/mongoose-ref-query"),
         Types = mongoose.Schema.Types;
 
     var smurfSchema = new mongoose.Schema({
@@ -26,7 +26,7 @@ module.exports = function(connection) {
     });
 
     smurfSchema.index({"memories.location":"2d"});
-    smurfSchema.plugin(mongooseApiQuery);
+    smurfSchema.plugin(mongooseRefQuery);
 
     return {
         Smurf: connection.model("Smurf", smurfSchema)

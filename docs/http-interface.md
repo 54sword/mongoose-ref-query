@@ -122,6 +122,10 @@ These are operators that can be used to alter how the passed in value is handled
 - `number={all}123,456` - Both 123 and 456 must be present
 - `number={nin}123,456` - Neither 123 nor 456
 
+### Dates
+
+- just like Numbers but the parameter is passed to the Date constructor.
+
 ### String
 
 - Basic

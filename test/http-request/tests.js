@@ -1,6 +1,6 @@
 "use strict";
 
-var mongooseApiQuery = require("../../lib/mongoose-api-query.js");
+var mongooseRefQuery = require("../../lib/mongoose-ref-query.js");
 
 describe("http GET request parsing", function(){
 
@@ -18,7 +18,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -39,7 +39,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -60,7 +60,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -81,7 +81,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -101,7 +101,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -124,7 +124,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
         expect(output.config.page).to.be(3);
@@ -150,7 +150,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -171,7 +171,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -191,7 +191,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -211,7 +211,7 @@ describe("http GET request parsing", function(){
             ]
         };
 
-        output = mongooseApiQuery.__parseQuery( input );
+        output = mongooseRefQuery.__parseQuery( input );
 
         objectsSame( expected, output.mongo_expression );
 
@@ -224,7 +224,7 @@ describe("http GET request parsing", function(){
         };
 
         expect(function() {
-          mongooseApiQuery.__parseQuery( input );
+          mongooseRefQuery.__parseQuery( input );
         }).to.throwError(/^Reached end of string inside operator!$/);
 
     });
@@ -236,7 +236,7 @@ describe("http GET request parsing", function(){
         };
 
         expect(function() {
-          mongooseApiQuery.__parseQuery( input );
+          mongooseRefQuery.__parseQuery( input );
         }).to.throwError(/^Invalid escape sequence/);
 
     });
@@ -248,7 +248,7 @@ describe("http GET request parsing", function(){
         };
 
         expect(function() {
-          mongooseApiQuery.__parseQuery( input );
+          mongooseRefQuery.__parseQuery( input );
         }).to.throwError(/^Escaped end of string!$/);
 
     });

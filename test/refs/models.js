@@ -3,7 +3,7 @@
 module.exports = function(connection) {
 
     var mongoose = require("mongoose-q")(),
-        mongooseApiQuery = require("../../lib/mongoose-api-query"),
+        mongooseRefQuery = require("../../lib/mongoose-ref-query"),
         Schema = mongoose.Schema;
 
     var ObjectId = Schema.Types.ObjectId;
@@ -30,7 +30,7 @@ module.exports = function(connection) {
 
     for ( var name in schemas ) {
         var schema = schemas[name];
-        schema.plugin(mongooseApiQuery);
+        schema.plugin(mongooseRefQuery);
         models[name] = connection.model(name, schema);
     }
 

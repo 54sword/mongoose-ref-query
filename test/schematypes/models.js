@@ -3,7 +3,7 @@
 module.exports = function(connection) {
 
     var mongoose = require("mongoose-q")(),
-        mongooseApiQuery = require("../../lib/mongoose-api-query");
+        mongooseRefQuery = require("../../lib/mongoose-ref-query");
 
     var Schema = mongoose.Schema;
 
@@ -27,7 +27,7 @@ module.exports = function(connection) {
     });
 
     rainbowSchema.index({"indexedText": "text"});
-    rainbowSchema.plugin(mongooseApiQuery);
+    rainbowSchema.plugin(mongooseRefQuery);
 
     return {
         Rainbow: connection.model("Rainbow", rainbowSchema)

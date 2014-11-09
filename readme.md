@@ -1,4 +1,4 @@
-# MONGOOSE-API-QUERY
+# MONGOOSE-REF-QUERY
 
 ## Overview
 
@@ -11,7 +11,7 @@
 Apply the plugin to any schema in the usual Mongoose fashion:
 
 ```
-monsterSchema.plugin(mongooseApiQuery[, options]);
+monsterSchema.plugin(mongooseRefQuery[, options]);
 ```
 
 ### options
@@ -19,33 +19,27 @@ monsterSchema.plugin(mongooseApiQuery[, options]);
 |  option     | type    | default | description                                                  |
 |-------------|---------|---------|--------------------------------------------------------------|
 | throwErrors | Boolean | false   | will throw errors if the expression doesn't match the schema |
+| debug       | Boolean | false   | will print debug info (the final mongo query)                |
 
 ### For the http interface
 
 ```
-Monster.apiQuery(req.query).exec()
+Monster.refQuery(req.query)()
 ```
 
 returns a promise.
 
-Or pass a callback in for a node-like syntax:
-
-```
-Monster.apiQuery(req.query, function(err, monsters){...
-```
-
-The apiQuery call will throw an error if **throwErrors** is set in the options.
-It will return a mock function returning a promise resolved to empty array otherwise.
+The refQuery call will throw an error if **throwErrors** is set in the options.
 
 ### For the advanced mongo query interface
 
 ```
-// .apiQueryPrepare(expression[, config])
-var trigger = Employee.apiQueryPrepare({ "manager.manager.name" : "herkules" });
+// .refQueryPrepare(expression[, config])
+var trigger = Employee.refQueryPrepare({ "manager.manager.name" : "herkules" });
 var promise = trigger();
 ```
 
-The apiQueryPrepare throws an error if set in the options,
+The refQueryPrepare throws an error if set in the options,
 if not the invalid part of the expression will simply be ignored.
 
 The config parameter is a query config object with the folowing options:
@@ -54,7 +48,7 @@ The config parameter is a query config object with the folowing options:
 |----------|---------------|---------|-------------------------------------------|
 | ids_only | Boolean       | false   | will return only the \_id field           |
 | per_page | Number        | 10      | max number of records returned            |
-| page     | Number        | 1       | max number of records returned            |
+| page     | Number        | 1       | page number                               |
 | sort     | Object        | false   | sorting parameter e.g. { field_name : -1 }|
 | populate | Array:String  | []      | list of populated fields                  |
 
