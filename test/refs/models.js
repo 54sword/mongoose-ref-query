@@ -30,7 +30,6 @@ module.exports = function(connection) {
 
 
     schemas.Employee.plugin(mongooseRefQuery, {
-        debug: true,
         backreferences: {
             manages: {
                 model: "Employee",

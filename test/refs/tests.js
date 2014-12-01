@@ -28,6 +28,16 @@ describe("backreferences", function(){
 
   testPath("/employee?manages.name=francesco", ["antonio"], nameUnorderedMatch);
 
+  it("should get by id", function(done) {
+      jsonRequest("/employee?name=francesco", function (responseData) {
+          var francesco_id = responseData[0]._id;
+          jsonRequest("/employee?manages="+francesco_id, function(responseData) {
+              expect(responseData[0].name).to.equal("antonio");
+              done();
+          });
+      });
+  });
+
 });
 
 describe("population", function() {

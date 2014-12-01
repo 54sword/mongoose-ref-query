@@ -96,6 +96,16 @@ global.testPath = function(path, expected, matcher) {
 
 };
 
+global.jsonRequest = function(path, cb) {
+    request({ url: "http://localhost:3000" + path, json: true }, function(error, response, content) {
+        if (error) throw error;
+        if (response.statusCode!==200)
+            throw new Error("Non-200 statusCode: " + response.statusCode +
+                            (content.error ? (" with message:\t" + content.error.message) : (" with content: " + content)));
+        cb(content);
+    });
+};
+
 /*
  * Compares the result names as a set
  * ( doesn't compare the order )

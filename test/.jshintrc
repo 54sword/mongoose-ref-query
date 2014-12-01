@@ -6,5 +6,5 @@
     "undef": true,
     "loopfunc": true,
     "quotmark": "double",
-    "predef": ["expect", "describe", "it", "serialize", "objectsSame", "testPath", "nameUnorderedMatch", "nameOrderedMatch", "containsName", "isOfNumber", "isOfNumberNoHeader", "inOrder", "testExpression", "getUnique", "genNewConnection"]
+    "predef": ["expect", "describe", "it", "serialize", "objectsSame", "testPath", "nameUnorderedMatch", "nameOrderedMatch", "containsName", "isOfNumber", "isOfNumberNoHeader", "inOrder", "testExpression", "getUnique", "genNewConnection", "jsonRequest"]
 }
