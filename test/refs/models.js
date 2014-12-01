@@ -22,15 +22,27 @@ module.exports = function(connection) {
                            name: String,
                            surname: String,
                            manager: { type: ObjectId, ref: "Employee" },
-                           age: Number
+                           age: Number,
                          })
     };
 
     var models = {};
 
+
+    schemas.Employee.plugin(mongooseRefQuery, {
+        debug: true,
+        backreferences: {
+            manages: {
+                model: "Employee",
+                property: "manager"
+            }
+        }
+    });
+
     for ( var name in schemas ) {
         var schema = schemas[name];
-        schema.plugin(mongooseRefQuery);
+        if (name!=="Employee")
+            schema.plugin(mongooseRefQuery, {});
         models[name] = connection.model(name, schema);
     }
 

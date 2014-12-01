@@ -88,7 +88,7 @@ global.testPath = function(path, expected, matcher) {
           if (error) throw error;
           if (response.statusCode!==200)
               throw new Error("Non-200 statusCode: " + response.statusCode +
-                              " with message:\t" + content.error.message);
+                              (content.error ? (" with message:\t" + content.error.message) : (" with content: " + content)));
           matcher( expected, content, done, response );
         });
 

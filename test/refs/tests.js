@@ -24,6 +24,12 @@ describe("references", function(){
 
 });
 
+describe("backreferences", function(){
+
+  testPath("/employee?manages.name=francesco", ["antonio"], nameUnorderedMatch);
+
+});
+
 describe("population", function() {
 
   testPath("/employee?manager.name=antonio", null, function(expected, got, done) {
