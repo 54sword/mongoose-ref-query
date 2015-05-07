@@ -44,13 +44,13 @@ if not the invalid part of the expression will simply be ignored.
 
 The config parameter is a query config object with the folowing options:
 
-|  option  | type          | default | description                               |
-|----------|---------------|---------|-------------------------------------------|
-| ids_only | Boolean       | false   | will return only the \_id field           |
-| per_page | Number        | 10      | max number of records returned            |
-| page     | Number        | 1       | page number                               |
-| sort     | Object        | false   | sorting parameter e.g. { field_name : -1 }|
-| populate | Array:String  | []      | list of populated fields                  |
+|  option  | type          | default | description                                       |
+|----------|---------------|---------|---------------------------------------------------|
+| ids_only | Boolean       | false   | will return only the \_id field                   |
+| per_page | Number        | 10      | max number of records returned (0 means unlimited |
+| page     | Number        | 1       | page number                                       |
+| sort     | Object        | false   | sorting parameter e.g. { field_name : -1 }        |
+| populate | Array:String  | []      | list of populated fields                          |
 
 ## Http interface syntax
 
