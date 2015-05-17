@@ -1,6 +1,6 @@
 {
   "name": "mongoose-ref-query",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Filippo Ghibellini <http://github.com/fghibellini>",
   "description": "http queries & queries on reference properties",
   "keywords": [
